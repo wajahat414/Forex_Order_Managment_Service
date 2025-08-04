@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "user_id": "user001",
+      "max_position_size": 1000000.0,
+      "max_daily_volume": 5000000.0,
+      "available_balance": 500000.0,
+      "margin_requirement": 0.05,
+      "is_active": true
+    },
+    {
+      "user_id": "user002",
+      "max_position_size": 500000.0,
+      "max_daily_volume": 2000000.0,
+      "available_balance": 250000.0,
+      "margin_requirement": 0.10,
+      "is_active": true
+    },
+    {
+      "user_id": "user003",
+      "max_position_size": 100000.0,
+      "max_daily_volume": 500000.0,
+      "available_balance": 50000.0,
+      "margin_requirement": 0.20,
+      "is_active": false
+    }
+  ]
+}

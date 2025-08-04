@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build OMS",
+			"type": "shell",
+			"command": "./build.sh",
+			"group": "build",
+			"problemMatcher": [
+				"$gcc"
+			],
+			"isBackground": false
+		}
+	]
+}

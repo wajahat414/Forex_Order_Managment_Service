@@ -1,0 +1,50 @@
+// OrderMessage.idl - FastDDS IDL definition for order messages
+
+enum OrderSide {
+    BUY,
+    SELL
+};
+
+enum OrderType {
+    MARKET,
+    LIMIT,
+    STOP,
+    STOP_LIMIT
+};
+
+enum OrderStatus {
+    NEW,
+    VALIDATED,
+    REJECTED,
+    ROUTED,
+    FILLED,
+    CANCELLED
+};
+
+struct OrderRequest {
+    string client_id;
+    string order_id;
+    string symbol;
+    OrderSide side;
+    OrderType type;
+    double quantity;
+    double price;
+    double stop_price;
+    long long timestamp;
+    string user_id;
+};
+
+struct OrderResponse {
+    string order_id;
+    OrderStatus status;
+    string message;
+    long long timestamp;
+};
+
+struct RiskParameters {
+    double max_position_size;
+    double max_daily_volume;
+    double max_order_value;
+    boolean is_symbol_enabled;
+    double margin_requirement;
+};

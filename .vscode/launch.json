@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug OMS",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/OrderManagementService",
+            "args": ["${workspaceFolder}/config/users.json", "${workspaceFolder}/config/symbols.json"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build OMS"
+        },
+        {
+            "name": "Debug Test Client",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/TestClient",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Build OMS"
+        }
+    ]
+}
