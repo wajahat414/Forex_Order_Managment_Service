@@ -2,14 +2,12 @@
 #include "RiskValidator.hpp"
 #include "OrderRouter.hpp"
 #include <iostream>
-#include <fastdds/dds/domain/DomainParticipantFactory.hpp>
-#include <fastdds/dds/subscriber/qos/SubscriberQos.hpp>
-#include <fastdds/dds/topic/qos/TopicQos.hpp>
-#include <fastdds/dds/subscriber/Subscriber.hpp>
+#include <thread>
+#include <BasicDomainParticipant.h>
 
 OrderListener::OrderListener(std::shared_ptr<RiskValidator> risk_validator,
                              std::shared_ptr<OrderRouter> order_router)
-    : participant_(nullptr), subscriber_(nullptr), topic_(nullptr), reader_(nullptr), risk_validator_(risk_validator), order_router_(order_router)
+    : participant_(nullptr), topic_tuple_(nullptr), reader_tuple_(nullptr), risk_validator_(risk_validator), order_router_(order_router)
 {
 }
 
@@ -20,81 +18,63 @@ OrderListener::~OrderListener()
 
 bool OrderListener::init()
 {
-    // Create participant
-    DomainParticipantQos pqos;
-    pqos.name("OrderManagementService_Participant");
-    participant_ = DomainParticipantFactory::get_instance()->create_participant(0, pqos);
-
-    if (participant_ == nullptr)
+    try
     {
-        std::cerr << "Failed to create DomainParticipant" << std::endl;
+        std::cout << "Initializing OrderListener..." << std::endl;
+
+        participant_ = std::make_shared<distributed_ats_utils::basic_domain_participant>(
+            DEFAULT_DOMAIN_ID, OMS_PARTICIPANT_NAME);
+        if (!participant_->create_subscriber())
+        {
+            std::cerr << "Failed to create subscriber for OrderListener" << std::endl;
+            LOG4CXX_ERROR(logger, "Failed to create DomainParticipant");
+            return false;
+        }
+        std::cout << "✅ Created subscriber" << std::endl;
+
+        topic_tuple_ = participant_->make_topic<OrderRequestPubSubType, OrderRequestPubSubType>(
+            NEW_ORDER_REQUEST_TOPIC_NAME);
+        if (topic_tuple_ == nullptr)
+        {
+            std::cerr << "Failed to create topic tuple" << std::endl;
+            LOG4CXX_ERROR(logger, "Failed to create topic Tuple");
+            return false;
+        }
+
+        std::cout << "✅ Created topic: " << NEW_ORDER_REQUEST_TOPIC_NAME << std::endl;
+
+        // Create data tuple reader with this listener
+
+        reader_tuple_ = participant_->make_data_reader_tuple<OrderRequestPubSubType>(
+            topic_tuple_, this);
+        if (reader_tuple_ == nullptr)
+        {
+            std::cerr << "Failed to create data reader tuple" << std::endl;
+            LOG4CXX_ERROR(logger, "Failed to create data reader tuple");
+            return false;
+        }
+        std::cout << "✅ Created DataReader with listener" << std::endl;
+
+        std::cout << "OrderListener initialized successfully" << std::endl;
+        LOG4CXX_INFO(logger, "Order Listener initialized successfully");
+        return true;
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Exception during OrderListener initialization: " << e.what() << std::endl;
+        LOG4CXX_ERROR(logger, "Exception during OrderListener initialization: " << e.what());
+        cleanup();
         return false;
     }
-
-    // Register the type
-    type_.reset(new OrderRequestPubSubType());
-    if (type_.register_type(participant_) != RETCODE_OK)
-    {
-        std::cerr << "Failed to register OrderRequest type" << std::endl;
-        return false;
-    }
-
-    // Create topic
-    TopicQos tqos;
-    topic_ = participant_->create_topic("new_order_request", type_.get_type_name(), tqos);
-    if (topic_ == nullptr)
-    {
-        std::cerr << "Failed to create topic" << std::endl;
-        return false;
-    }
-
-    // Create subscriber
-    SubscriberQos sqos;
-    subscriber_ = participant_->create_subscriber(sqos);
-    if (subscriber_ == nullptr)
-    {
-        std::cerr << "Failed to create subscriber" << std::endl;
-        return false;
-    }
-
-    // Create DataReader
-    DataReaderQos rqos;
-    rqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
-    rqos.durability().kind = VOLATILE_DURABILITY_QOS;
-
-    reader_ = subscriber_->create_datareader(topic_, rqos, this);
-    if (reader_ == nullptr)
-    {
-        std::cerr << "Failed to create DataReader" << std::endl;
-        return false;
-    }
-
-    std::cout << "OrderListener initialized successfully" << std::endl;
-    return true;
 }
 
 void OrderListener::cleanup()
 {
-    if (participant_ != nullptr)
-    {
-        if (reader_ != nullptr)
-        {
-            subscriber_->delete_datareader(reader_);
-            reader_ = nullptr;
-        }
-        if (subscriber_ != nullptr)
-        {
-            participant_->delete_subscriber(subscriber_);
-            subscriber_ = nullptr;
-        }
-        if (topic_ != nullptr)
-        {
-            participant_->delete_topic(topic_);
-            topic_ = nullptr;
-        }
-        DomainParticipantFactory::get_instance()->delete_participant(participant_);
-        participant_ = nullptr;
-    }
+
+    reader_tuple_.reset();
+    topic_tuple_.reset();
+    participant_.reset();
+    LOG4CXX_INFO(logger, "OrderListener resources cleaned up");
 }
 
 void OrderListener::on_data_available(DataReader *reader)
@@ -110,18 +90,25 @@ void OrderListener::on_data_available(DataReader *reader)
                       << " for symbol: " << order.symbol() << std::endl;
             process_order(order);
         }
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
-void OrderListener::on_subscription_matched(DataReader *reader, const SubscriptionMatchedStatus &info)
+void OrderListener::on_subscription_matched(eprosima::fastdds::dds::DataReader *reader, const eprosima::fastdds::dds::SubscriptionMatchedStatus &info)
 {
     if (info.current_count_change == 1)
     {
         std::cout << "Subscriber matched with publisher" << std::endl;
+        LOG4CXX_INFO(logger, "Subscriber matched with publisher");
+        std::cout << "Current count: " << info.current_count << ", Total count: " << info.total_count << std::endl;
+        LOG4CXX_INFO(logger, "Current count: " << info.current_count << ", Total count: " << info.total_count);
     }
     else if (info.current_count_change == -1)
     {
         std::cout << "Subscriber unmatched from publisher" << std::endl;
+        LOG4CXX_INFO(logger, "Subscriber unmatched from publisher");
+        std::cout << "Current count: " << info.current_count << ", Total count: " << info.total_count << std::endl;
+        LOG4CXX_INFO(logger, "Current count: " << info.current_count << ", Total count: " << info.total_count);
     }
 }
 
@@ -129,21 +116,21 @@ void OrderListener::process_order(const OrderRequest &order)
 {
     std::string rejection_reason;
 
+    auto current_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    LOG4CXX_DEBUG(logger, "Processing order: " << order.order_id() << " at timestamp: " << current_timestamp << " from user: " << order.user_id());
     // Validate order through risk validator
     if (!risk_validator_->validate_order(order, rejection_reason))
     {
         std::cout << "Order " << order.order_id() << " rejected: " << rejection_reason << std::endl;
+        LOG4CXX_WARN(logger, "Order " << order.order_id() << " rejected: " << rejection_reason);
 
         // Send rejection response
         OrderResponse response;
         response.order_id(order.order_id());
         response.status(OrderStatus::REJECTED);
         response.message(rejection_reason);
-        response.timestamp(std::chrono::duration_cast<std::chrono::milliseconds>(
-                               std::chrono::system_clock::now().time_since_epoch())
-                               .count());
+        response.timestamp(current_timestamp);
 
-        order_router_->send_order_response(response);
         return;
     }
 
@@ -151,31 +138,25 @@ void OrderListener::process_order(const OrderRequest &order)
     if (order_router_->route_to_matching_engine(order))
     {
         std::cout << "Order " << order.order_id() << " routed to matching engine" << std::endl;
+        LOG4CXX_INFO(logger, "Order " << order.order_id() << " routed to matching engine");
 
         // Send validation success response
         OrderResponse response;
         response.order_id(order.order_id());
-        response.status(OrderStatus::VALIDATED);
+        response.status(OrderStatus::ROUTED);
         response.message("Order validated and routed to matching engine");
-        response.timestamp(std::chrono::duration_cast<std::chrono::milliseconds>(
-                               std::chrono::system_clock::now().time_since_epoch())
-                               .count());
-
-        order_router_->send_order_response(response);
+        response.timestamp(current_timestamp);
     }
     else
     {
         std::cerr << "Failed to route order " << order.order_id() << " to matching engine" << std::endl;
 
+        LOG4CXX_ERROR(logger, "Failed to route order " << order.order_id() << " to matching engine");
         // Send routing failure response
         OrderResponse response;
         response.order_id(order.order_id());
         response.status(OrderStatus::REJECTED);
         response.message("Failed to route order to matching engine");
-        response.timestamp(std::chrono::duration_cast<std::chrono::milliseconds>(
-                               std::chrono::system_clock::now().time_since_epoch())
-                               .count());
-
-        order_router_->send_order_response(response);
+        response.timestamp(current_timestamp);
     }
 }

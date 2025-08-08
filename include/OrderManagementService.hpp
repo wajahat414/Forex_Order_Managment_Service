@@ -12,7 +12,7 @@ public:
     OrderManagementService();
     ~OrderManagementService();
 
-    bool initialize(const std::string &user_config_file, const std::string &symbol_config_file);
+    bool initialize(const std::string &user_config_file, const std::string &symbol_config_file, OrderManagmentService::Application &application);
     void start();
     void stop();
     bool is_running() const { return running_; }

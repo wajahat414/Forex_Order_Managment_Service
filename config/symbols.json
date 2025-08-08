@@ -1,49 +1,13 @@
 {
   "symbols": [
     {
-      "symbol": "EURUSD",
+      "symbol": "BTC-USD",
       "min_quantity": 1000.0,
       "max_quantity": 10000000.0,
-      "tick_size": 0.00001,
+      "tick_size": 0.00000,
       "margin_rate": 0.033,
       "is_tradeable": true,
       "max_order_value": 5000000.0
-    },
-    {
-      "symbol": "GBPUSD",
-      "min_quantity": 1000.0,
-      "max_quantity": 10000000.0,
-      "tick_size": 0.00001,
-      "margin_rate": 0.05,
-      "is_tradeable": true,
-      "max_order_value": 5000000.0
-    },
-    {
-      "symbol": "USDJPY",
-      "min_quantity": 1000.0,
-      "max_quantity": 10000000.0,
-      "tick_size": 0.001,
-      "margin_rate": 0.04,
-      "is_tradeable": true,
-      "max_order_value": 5000000.0
-    },
-    {
-      "symbol": "AUDUSD",
-      "min_quantity": 1000.0,
-      "max_quantity": 5000000.0,
-      "tick_size": 0.00001,
-      "margin_rate": 0.05,
-      "is_tradeable": true,
-      "max_order_value": 2500000.0
-    },
-    {
-      "symbol": "SUSPENDED",
-      "min_quantity": 1000.0,
-      "max_quantity": 1000000.0,
-      "tick_size": 0.00001,
-      "margin_rate": 0.10,
-      "is_tradeable": false,
-      "max_order_value": 100000.0
     }
   ]
 }

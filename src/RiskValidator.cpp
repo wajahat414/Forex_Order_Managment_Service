@@ -44,10 +44,10 @@ bool RiskValidator::validate_order(const OrderRequest &order, std::string &rejec
         return false;
     }
 
-    if (!validate_user_limits(order, user_it->second, rejection_reason))
-    {
-        return false;
-    }
+    // if (!validate_user_limits(order, user_it->second, rejection_reason))
+    // {
+    //     return false;
+    // }
 
     // Check symbol configuration
     auto symbol_it = symbol_configs_.find(order.symbol());

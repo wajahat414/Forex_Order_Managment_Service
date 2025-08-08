@@ -21,6 +21,7 @@ enum OrderStatus {
     CANCELLED
 };
 
+
 struct OrderRequest {
     string client_id;
     string order_id;
@@ -33,6 +34,7 @@ struct OrderRequest {
     long long timestamp;
     string user_id;
 };
+
 
 struct OrderResponse {
     string order_id;

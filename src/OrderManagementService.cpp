@@ -17,7 +17,7 @@ OrderManagementService::~OrderManagementService()
     cleanup();
 }
 
-bool OrderManagementService::initialize(const std::string &user_config_file, const std::string &symbol_config_file)
+bool OrderManagementService::initialize(const std::string &user_config_file, const std::string &symbol_config_file, OrderManagmentService::Application &application)
 {
     std::cout << "Initializing Order Management Service..." << std::endl;
 
@@ -30,12 +30,7 @@ bool OrderManagementService::initialize(const std::string &user_config_file, con
     }
 
     // Initialize order router
-    order_router_ = std::make_shared<OrderRouter>();
-    if (!order_router_->initialize())
-    {
-        std::cerr << "Failed to initialize order router" << std::endl;
-        return false;
-    }
+    order_router_ = std::make_shared<OrderRouter>(application);
 
     // Initialize order listener
     order_listener_ = std::make_shared<OrderListener>(risk_validator_, order_router_);
@@ -85,12 +80,6 @@ void OrderManagementService::cleanup()
     {
         order_listener_->cleanup();
         order_listener_.reset();
-    }
-
-    if (order_router_)
-    {
-        order_router_->cleanup();
-        order_router_.reset();
     }
 
     risk_validator_.reset();

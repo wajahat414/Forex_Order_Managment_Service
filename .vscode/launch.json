@@ -2,21 +2,49 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug OMS (CodeLLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/OrderManagementService",
+            "args": ["${workspaceFolder}/config/users.json", "${workspaceFolder}/config/symbols.json", "${workspaceFolder}/config/fastdds_profile.xml"],
+            "cwd": "${workspaceFolder}/build",
+            "env": {
+                "DYLD_LIBRARY_PATH": "${workspaceFolder}/dds/lib:${env:DYLD_LIBRARY_PATH}"
+            },
+            "preLaunchTask": "Build OMS"
+        },
+        {
+            "name": "Debug Test Client (CodeLLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/TestClient",
+            "args": [],
+            "cwd": "${workspaceFolder}/build",
+            "env": {
+                "DYLD_LIBRARY_PATH": "${workspaceFolder}/dds/lib:${env:DYLD_LIBRARY_PATH}"
+            },
+            "preLaunchTask": "Build OMS"
+        },
+        {
             "name": "Debug OMS",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/OrderManagementService",
-            "args": ["${workspaceFolder}/config/users.json", "${workspaceFolder}/config/symbols.json"],
+            "args": ["${workspaceFolder}/config/users.json", "${workspaceFolder}/config/symbols.json", "${workspaceFolder}/config/fastdds_profile.xml"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "DYLD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/dds/lib:${env:DYLD_LIBRARY_PATH}"
+                }
+            ],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "MIMode": "lldb",
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
+                    "description": "Enable pretty-printing for lldb",
+                    "text": "settings set target.max-children-count 50",
                     "ignoreFailures": true
                 }
             ],
@@ -30,14 +58,18 @@
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/build",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "DYLD_LIBRARY_PATH",
+                    "value": "${workspaceFolder}/dds/lib:${env:DYLD_LIBRARY_PATH}"
+                }
+            ],
             "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
+            "MIMode": "lldb",
             "setupCommands": [
                 {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
+                    "description": "Enable pretty-printing for lldb",
+                    "text": "settings set target.max-children-count 50",
                     "ignoreFailures": true
                 }
             ],
