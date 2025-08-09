@@ -105,12 +105,14 @@ public:
                 std::cerr << "❌ Failed to register OrderRequest type" << std::endl;
                 return false;
             }
+            std::string type_name = "DistributedATS_NewOrderSingle::NewOrderSingle";
+
             std::cout << "✅ Registered type: " << type_.get_type_name() << std::endl;
 
             // Create topic with RAII cleanup
             TopicQos tqos;
             Topic *raw_topic = participant_->create_topic(
-                NEW_ORDER_REQUEST_TOPIC_NAME, type_.get_type_name(), tqos);
+                NEW_ORDER_REQUEST_TOPIC_NAME, type_name, tqos);
 
             if (raw_topic == nullptr)
             {

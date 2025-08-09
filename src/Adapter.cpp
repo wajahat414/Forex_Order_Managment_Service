@@ -35,10 +35,10 @@ char OrderAdapter::convertOrderTypeToChar(OrderType type)
     }
 }
 
-NewOrderSingle OrderAdapter::requestToNewOrderSingle(const OrderRequest &order)
+DistributedATS_NewOrderSingle::NewOrderSingle OrderAdapter::requestToNewOrderSingle(const OrderRequest &order)
 
 {
-    Header header;
+    DistributedATS::Header header;
     header.BeginString("FIX.4.4");                            // FIX protocol version
     header.MsgType("D");                                      // NewOrderSingle message type
     header.SenderCompID("OMS_ROUTER");                        // OMS component identifier
@@ -46,7 +46,7 @@ NewOrderSingle OrderAdapter::requestToNewOrderSingle(const OrderRequest &order)
     header.MsgSeqNum(OrderAdapter::generateSequenceNumber()); // Unique sequence number
     header.SendingTime(OrderAdapter::getCurrentUTCTimestamp());
 
-    NewOrderSingle new_order;
+    DistributedATS_NewOrderSingle::NewOrderSingle new_order;
     new_order.fix_header(header);
     new_order.ClOrdID(order.order_id());
     new_order.Symbol(order.symbol());

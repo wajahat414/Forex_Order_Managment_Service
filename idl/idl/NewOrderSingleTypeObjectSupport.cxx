@@ -38,6 +38,7 @@
 
 using namespace eprosima::fastdds::dds::xtypes;
 
+namespace DistributedATS_NewOrderSingle {
 // TypeIdentifier is returned by reference: dependent structures/unions are registered in this same method
 void register_NewOrderSingle_type_identifier(
         TypeIdentifierPair& type_ids_NewOrderSingle)
@@ -46,12 +47,12 @@ void register_NewOrderSingle_type_identifier(
     ReturnCode_t return_code_NewOrderSingle {eprosima::fastdds::dds::RETCODE_OK};
     return_code_NewOrderSingle =
         eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-        "NewOrderSingle", type_ids_NewOrderSingle);
+        "DistributedATS_NewOrderSingle::NewOrderSingle", type_ids_NewOrderSingle);
     if (eprosima::fastdds::dds::RETCODE_OK != return_code_NewOrderSingle)
     {
         StructTypeFlag struct_flags_NewOrderSingle = TypeObjectUtils::build_struct_type_flag(eprosima::fastdds::dds::xtypes::ExtensibilityKind::APPENDABLE,
                 false, false);
-        QualifiedTypeName type_name_NewOrderSingle = "NewOrderSingle";
+        QualifiedTypeName type_name_NewOrderSingle = "DistributedATS_NewOrderSingle::NewOrderSingle";
         eprosima::fastcdr::optional<AppliedBuiltinTypeAnnotations> type_ann_builtin_NewOrderSingle;
         eprosima::fastcdr::optional<AppliedAnnotationSeq> ann_custom_NewOrderSingle;
         CompleteTypeDetail detail_NewOrderSingle = TypeObjectUtils::build_complete_type_detail(type_ann_builtin_NewOrderSingle, ann_custom_NewOrderSingle, type_name_NewOrderSingle.to_string());
@@ -215,11 +216,11 @@ void register_NewOrderSingle_type_identifier(
             ReturnCode_t return_code_fix_header {eprosima::fastdds::dds::RETCODE_OK};
             return_code_fix_header =
                 eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-                "Header", type_ids_fix_header);
+                "DistributedATS::Header", type_ids_fix_header);
 
             if (eprosima::fastdds::dds::RETCODE_OK != return_code_fix_header)
             {
-            ::register_Header_type_identifier(type_ids_fix_header);
+                ::DistributedATS::register_Header_type_identifier(type_ids_fix_header);
             }
             StructMemberFlag member_flags_fix_header = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
@@ -643,7 +644,9 @@ void register_NewOrderSingle_type_identifier(
                 TypeObjectUtils::build_and_register_struct_type_object(struct_type_NewOrderSingle, type_name_NewOrderSingle.to_string(), type_ids_NewOrderSingle))
         {
             EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION,
-                    "NewOrderSingle already registered in TypeObjectRegistry for a different type.");
+                    "DistributedATS_NewOrderSingle::NewOrderSingle already registered in TypeObjectRegistry for a different type.");
         }
     }
 }
+} // namespace DistributedATS_NewOrderSingle
+

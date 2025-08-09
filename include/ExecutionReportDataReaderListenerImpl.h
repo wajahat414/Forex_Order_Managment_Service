@@ -17,7 +17,7 @@ namespace OrderManagmentService
     class ExecutionReportDataReaderListenerImpl : public eprosima::fastdds::dds::DataReaderListener
     {
     private:
-        message_composer_thread<ExecutionReport> _processor;
+        message_composer_thread<DistributedATS_ExecutionReport::ExecutionReport> _processor;
 
     public:
         ExecutionReportDataReaderListenerImpl(Application &application);

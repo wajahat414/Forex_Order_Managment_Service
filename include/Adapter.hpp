@@ -6,7 +6,7 @@
 class OrderAdapter
 {
 public:
-    static NewOrderSingle requestToNewOrderSingle(const OrderRequest &order);
+    static DistributedATS_NewOrderSingle::NewOrderSingle requestToNewOrderSingle(const OrderRequest &order);
 
 private:
     static char convertOrderSideToChar(OrderSide side);

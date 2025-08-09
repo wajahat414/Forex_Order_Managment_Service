@@ -5,7 +5,7 @@
 class HeaderLogger
 {
 public:
-	static void log(std::ostream &out, Header &ddsMsg) __attribute__((visibility("default")))
+	static void log(std::ostream &out, DistributedATS::Header &ddsMsg) __attribute__((visibility("default")))
 	{
 
 		;

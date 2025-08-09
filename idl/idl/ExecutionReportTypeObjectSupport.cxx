@@ -38,6 +38,7 @@
 
 using namespace eprosima::fastdds::dds::xtypes;
 
+namespace DistributedATS_ExecutionReport {
 // TypeIdentifier is returned by reference: dependent structures/unions are registered in this same method
 void register_ExecutionReport_type_identifier(
         TypeIdentifierPair& type_ids_ExecutionReport)
@@ -46,12 +47,12 @@ void register_ExecutionReport_type_identifier(
     ReturnCode_t return_code_ExecutionReport {eprosima::fastdds::dds::RETCODE_OK};
     return_code_ExecutionReport =
         eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-        "ExecutionReport", type_ids_ExecutionReport);
+        "DistributedATS_ExecutionReport::ExecutionReport", type_ids_ExecutionReport);
     if (eprosima::fastdds::dds::RETCODE_OK != return_code_ExecutionReport)
     {
         StructTypeFlag struct_flags_ExecutionReport = TypeObjectUtils::build_struct_type_flag(eprosima::fastdds::dds::xtypes::ExtensibilityKind::APPENDABLE,
                 false, false);
-        QualifiedTypeName type_name_ExecutionReport = "ExecutionReport";
+        QualifiedTypeName type_name_ExecutionReport = "DistributedATS_ExecutionReport::ExecutionReport";
         eprosima::fastcdr::optional<AppliedBuiltinTypeAnnotations> type_ann_builtin_ExecutionReport;
         eprosima::fastcdr::optional<AppliedAnnotationSeq> ann_custom_ExecutionReport;
         CompleteTypeDetail detail_ExecutionReport = TypeObjectUtils::build_complete_type_detail(type_ann_builtin_ExecutionReport, ann_custom_ExecutionReport, type_name_ExecutionReport.to_string());
@@ -215,11 +216,11 @@ void register_ExecutionReport_type_identifier(
             ReturnCode_t return_code_fix_header {eprosima::fastdds::dds::RETCODE_OK};
             return_code_fix_header =
                 eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-                "Header", type_ids_fix_header);
+                "DistributedATS::Header", type_ids_fix_header);
 
             if (eprosima::fastdds::dds::RETCODE_OK != return_code_fix_header)
             {
-            ::register_Header_type_identifier(type_ids_fix_header);
+                ::DistributedATS::register_Header_type_identifier(type_ids_fix_header);
             }
             StructMemberFlag member_flags_fix_header = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
@@ -959,7 +960,9 @@ void register_ExecutionReport_type_identifier(
                 TypeObjectUtils::build_and_register_struct_type_object(struct_type_ExecutionReport, type_name_ExecutionReport.to_string(), type_ids_ExecutionReport))
         {
             EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION,
-                    "ExecutionReport already registered in TypeObjectRegistry for a different type.");
+                    "DistributedATS_ExecutionReport::ExecutionReport already registered in TypeObjectRegistry for a different type.");
         }
     }
 }
+} // namespace DistributedATS_ExecutionReport
+

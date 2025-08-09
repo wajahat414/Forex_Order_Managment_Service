@@ -1,5 +1,11 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
 #include "Header.idl"
-struct ExecutionReport
+
+module DistributedATS_ExecutionReport
+{
+
+	
+	struct ExecutionReport
 	{
 		string DATS_Source;
      		string DATS_Destination;
@@ -7,7 +13,7 @@ struct ExecutionReport
     		string DATS_DestinationUser;
 
 
-		Header fix_header;
+		DistributedATS::Header fix_header;
 
 		string OrderID;
 		string OrigClOrdID;
@@ -32,3 +38,4 @@ struct ExecutionReport
 		unsigned long long TransactTime;
 		string Text;
 	};
+};

@@ -6,6 +6,7 @@
 
 #include <NewOrderSinglePubSubTypes.hpp>
 
+using namespace DistributedATS_NewOrderSingle;
 namespace OrderManagmentService
 {
     struct DataWriterContainer

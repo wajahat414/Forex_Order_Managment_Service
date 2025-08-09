@@ -1,4 +1,6 @@
 #include "Header.idl"
+module DistributedATS_NewOrderSingle
+{
 
 
 struct NewOrderSingle {
@@ -6,7 +8,7 @@ struct NewOrderSingle {
     string DATS_Destination;
     string DATS_SourceUser;
     string DATS_DestinationUser;
-    Header fix_header;
+   	DistributedATS::Header fix_header;
     string ClOrdID;
 	string ExecInst;
 	string Symbol;
@@ -21,3 +23,4 @@ struct NewOrderSingle {
 	string Text;
 	};
 
+};

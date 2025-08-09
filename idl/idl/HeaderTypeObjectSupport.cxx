@@ -37,6 +37,7 @@
 
 using namespace eprosima::fastdds::dds::xtypes;
 
+namespace DistributedATS {
 // TypeIdentifier is returned by reference: dependent structures/unions are registered in this same method
 void register_Header_type_identifier(
         TypeIdentifierPair& type_ids_Header)
@@ -45,12 +46,12 @@ void register_Header_type_identifier(
     ReturnCode_t return_code_Header {eprosima::fastdds::dds::RETCODE_OK};
     return_code_Header =
         eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-        "Header", type_ids_Header);
+        "DistributedATS::Header", type_ids_Header);
     if (eprosima::fastdds::dds::RETCODE_OK != return_code_Header)
     {
         StructTypeFlag struct_flags_Header = TypeObjectUtils::build_struct_type_flag(eprosima::fastdds::dds::xtypes::ExtensibilityKind::APPENDABLE,
                 false, false);
-        QualifiedTypeName type_name_Header = "Header";
+        QualifiedTypeName type_name_Header = "DistributedATS::Header";
         eprosima::fastcdr::optional<AppliedBuiltinTypeAnnotations> type_ann_builtin_Header;
         eprosima::fastcdr::optional<AppliedAnnotationSeq> ann_custom_Header;
         CompleteTypeDetail detail_Header = TypeObjectUtils::build_complete_type_detail(type_ann_builtin_Header, ann_custom_Header, type_name_Header.to_string());
@@ -380,7 +381,9 @@ void register_Header_type_identifier(
                 TypeObjectUtils::build_and_register_struct_type_object(struct_type_Header, type_name_Header.to_string(), type_ids_Header))
         {
             EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION,
-                    "Header already registered in TypeObjectRegistry for a different type.");
+                    "DistributedATS::Header already registered in TypeObjectRegistry for a different type.");
         }
     }
 }
+} // namespace DistributedATS
+

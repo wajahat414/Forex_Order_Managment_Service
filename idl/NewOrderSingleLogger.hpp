@@ -7,7 +7,7 @@
 class NewOrderSingleLogger
 {
 public:
-	static void log(std::ostream &out, NewOrderSingle &ddsMsg) __attribute__((visibility("default")))
+	static void log(std::ostream &out, DistributedATS_NewOrderSingle::NewOrderSingle &ddsMsg) __attribute__((visibility("default")))
 	{
 		;
 		out << "Message : NewOrderSingle { " << std::endl;
