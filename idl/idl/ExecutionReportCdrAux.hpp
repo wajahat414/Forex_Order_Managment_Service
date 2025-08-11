@@ -23,6 +23,7 @@
 #define FAST_DDS_GENERATED__DISTRIBUTEDATS_EXECUTIONREPORT_EXECUTIONREPORTCDRAUX_HPP
 
 #include "ExecutionReport.hpp"
+
 constexpr uint32_t DistributedATS_ExecutionReport_ExecutionReport_max_cdr_typesize {4508UL};
 constexpr uint32_t DistributedATS_ExecutionReport_ExecutionReport_max_key_cdr_typesize {0UL};
 

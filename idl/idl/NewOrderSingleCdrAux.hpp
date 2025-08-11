@@ -23,6 +23,7 @@
 #define FAST_DDS_GENERATED__DISTRIBUTEDATS_NEWORDERSINGLE_NEWORDERSINGLECDRAUX_HPP
 
 #include "NewOrderSingle.hpp"
+
 constexpr uint32_t DistributedATS_NewOrderSingle_NewOrderSingle_max_cdr_typesize {3960UL};
 constexpr uint32_t DistributedATS_NewOrderSingle_NewOrderSingle_max_key_cdr_typesize {0UL};
 

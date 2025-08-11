@@ -48,7 +48,7 @@ namespace DistributedATS
     {
     public:
 
-        typedef ::DistributedATS::Header type;
+        typedef Header type;
 
         eProsima_user_DllExport HeaderPubSubType();
 
@@ -120,7 +120,6 @@ namespace DistributedATS
         unsigned char* key_buffer_;
 
     };
-
 } // namespace DistributedATS
 
 #endif // FAST_DDS_GENERATED__DISTRIBUTEDATS_HEADER_PUBSUBTYPES_HPP

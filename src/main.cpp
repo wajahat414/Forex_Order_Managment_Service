@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     OrderManagmentService::Application application(data_service_name, sender_comp_id, data_writer_container);
 
-    // auto data_reader_container = std::make_shared<OrderManagmentService::DataReaderContainer>(participant_ptr, application, sender_comp_id);
+    auto data_reader_container = std::make_shared<OrderManagmentService::DataReaderContainer>(participant_ptr, application, sender_comp_id);
 
     std::cout
         << "=== Order Management Service ===" << std::endl;

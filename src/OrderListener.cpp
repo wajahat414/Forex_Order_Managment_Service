@@ -82,8 +82,9 @@ void OrderListener::on_data_available(DataReader *reader)
     OrderRequest order;
     SampleInfo info;
 
-    while (reader->read_next_sample(&order, &info) == RETCODE_OK)
+       while (reader->read_next_sample(&order, &info) == RETCODE_OK)
     {
+
         if (info.valid_data)
         {
             std::cout << "Received new order: " << order.order_id()

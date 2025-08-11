@@ -9,13 +9,19 @@
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <ExecutionReport.hpp>
+#include <ExecutionReportLogger.hpp>
 
-auto const exec_report_processor = [](OrderManagmentService::Application &application,DistributedATS_ExecutionReport::  ExecutionReport &execution_report)
+auto const exec_report_processor = [](OrderManagmentService::Application &application, DistributedATS_ExecutionReport::ExecutionReport &execution_report)
 {
     execution_report.fix_header().BeginString("FIX4.4");
     execution_report.fix_header().TargetCompID(execution_report.DATS_Destination());
     execution_report.fix_header().SenderCompID(execution_report.DATS_DestinationUser());
     execution_report.fix_header().SendingTime(0);
+
+    std::stringstream ss;
+    ExecutionReportLogger::log(ss, execution_report);
+
+    LOG4CXX_INFO(logger, "Execution Report " << ss.str());
 };
 
 namespace OrderManagmentService

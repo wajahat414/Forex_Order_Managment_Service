@@ -49,7 +49,7 @@ namespace DistributedATS_ExecutionReport
     {
     public:
 
-        typedef ::DistributedATS_ExecutionReport::ExecutionReport type;
+        typedef ExecutionReport type;
 
         eProsima_user_DllExport ExecutionReportPubSubType();
 
@@ -121,7 +121,6 @@ namespace DistributedATS_ExecutionReport
         unsigned char* key_buffer_;
 
     };
-
 } // namespace DistributedATS_ExecutionReport
 
 #endif // FAST_DDS_GENERATED__DISTRIBUTEDATS_EXECUTIONREPORT_EXECUTIONREPORT_PUBSUBTYPES_HPP

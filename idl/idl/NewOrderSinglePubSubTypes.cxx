@@ -57,7 +57,7 @@ namespace DistributedATS_NewOrderSingle {
             SerializedPayload_t& payload,
             DataRepresentationId_t data_representation)
     {
-        const ::DistributedATS_NewOrderSingle::NewOrderSingle* p_type = static_cast<const ::DistributedATS_NewOrderSingle::NewOrderSingle*>(data);
+        const NewOrderSingle* p_type = static_cast<const NewOrderSingle*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.max_size);
@@ -96,7 +96,7 @@ namespace DistributedATS_NewOrderSingle {
         try
         {
             // Convert DATA to pointer of your type
-            ::DistributedATS_NewOrderSingle::NewOrderSingle* p_type = static_cast<::DistributedATS_NewOrderSingle::NewOrderSingle*>(data);
+            NewOrderSingle* p_type = static_cast<NewOrderSingle*>(data);
 
             // Object that manages the raw buffer.
             eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.length);
@@ -130,7 +130,7 @@ namespace DistributedATS_NewOrderSingle {
                 eprosima::fastcdr::CdrVersion::XCDRv1 :eprosima::fastcdr::CdrVersion::XCDRv2);
             size_t current_alignment {0};
             return static_cast<uint32_t>(calculator.calculate_serialized_size(
-                        *static_cast<const ::DistributedATS_NewOrderSingle::NewOrderSingle*>(data), current_alignment)) +
+                        *static_cast<const NewOrderSingle*>(data), current_alignment)) +
                     4u /*encapsulation*/;
         }
         catch (eprosima::fastcdr::exception::Exception& /*exception*/)
@@ -141,13 +141,13 @@ namespace DistributedATS_NewOrderSingle {
 
     void* NewOrderSinglePubSubType::create_data()
     {
-        return reinterpret_cast<void*>(new ::DistributedATS_NewOrderSingle::NewOrderSingle());
+        return reinterpret_cast<void*>(new NewOrderSingle());
     }
 
     void NewOrderSinglePubSubType::delete_data(
             void* data)
     {
-        delete(reinterpret_cast<::DistributedATS_NewOrderSingle::NewOrderSingle*>(data));
+        delete(reinterpret_cast<NewOrderSingle*>(data));
     }
 
     bool NewOrderSinglePubSubType::compute_key(
@@ -160,7 +160,7 @@ namespace DistributedATS_NewOrderSingle {
             return false;
         }
 
-        ::DistributedATS_NewOrderSingle::NewOrderSingle data;
+        NewOrderSingle data;
         if (deserialize(payload, static_cast<void*>(&data)))
         {
             return compute_key(static_cast<void*>(&data), handle, force_md5);
@@ -179,7 +179,7 @@ namespace DistributedATS_NewOrderSingle {
             return false;
         }
 
-        const ::DistributedATS_NewOrderSingle::NewOrderSingle* p_type = static_cast<const ::DistributedATS_NewOrderSingle::NewOrderSingle*>(data);
+        const NewOrderSingle* p_type = static_cast<const NewOrderSingle*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(key_buffer_),

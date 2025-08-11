@@ -1,0 +1,19 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_Heartbeat
+{
+
+	
+	struct Heartbeat
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+	};
+};

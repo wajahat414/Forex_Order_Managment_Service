@@ -32,6 +32,7 @@
 #include <fastdds/dds/xtypes/type_representation/ITypeObjectRegistry.hpp>
 #include <fastdds/dds/xtypes/type_representation/TypeObject.hpp>
 #include <fastdds/dds/xtypes/type_representation/TypeObjectUtils.hpp>
+
 #include "Header.hpp"
 
 
@@ -385,5 +386,6 @@ void register_Header_type_identifier(
         }
     }
 }
+
 } // namespace DistributedATS
 

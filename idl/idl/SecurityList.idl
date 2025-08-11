@@ -1,0 +1,31 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_SecurityList
+{
+
+	struct NoRelatedSym
+	{
+		string Symbol;
+		string SecurityExchange;
+		string Text;
+	};
+	typedef sequence<NoRelatedSym> NoRelatedSymSeq;
+
+	
+	struct SecurityList
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+		string SecurityReqID;
+		string SecurityResponseID;
+		long SecurityRequestResult;
+		NoRelatedSymSeq c_NoRelatedSym;
+	};
+};

@@ -1,0 +1,24 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_Logon
+{
+
+	
+	struct Logon
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+		long EncryptMethod;
+		long HeartBtInt;
+		string RawData;
+		string Username;
+		string Password;
+	};
+};

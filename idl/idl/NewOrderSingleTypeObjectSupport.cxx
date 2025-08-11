@@ -32,6 +32,7 @@
 #include <fastdds/dds/xtypes/type_representation/ITypeObjectRegistry.hpp>
 #include <fastdds/dds/xtypes/type_representation/TypeObject.hpp>
 #include <fastdds/dds/xtypes/type_representation/TypeObjectUtils.hpp>
+
 #include "NewOrderSingle.hpp"
 
 #include "Header.hpp"
@@ -60,6 +61,34 @@ void register_NewOrderSingle_type_identifier(
         header_NewOrderSingle = TypeObjectUtils::build_complete_struct_header(TypeIdentifier(), detail_NewOrderSingle);
         CompleteStructMemberSeq member_seq_NewOrderSingle;
         {
+            TypeIdentifierPair type_ids_fix_header;
+            ReturnCode_t return_code_fix_header {eprosima::fastdds::dds::RETCODE_OK};
+            return_code_fix_header =
+                eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
+                "DistributedATS::Header", type_ids_fix_header);
+
+            if (eprosima::fastdds::dds::RETCODE_OK != return_code_fix_header)
+            {
+                DistributedATS::register_Header_type_identifier(type_ids_fix_header);
+            }
+            StructMemberFlag member_flags_fix_header = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
+                    false, false, false, false);
+            MemberId member_id_fix_header = 0x00000000;
+            bool common_fix_header_ec {false};
+            CommonStructMember common_fix_header {TypeObjectUtils::build_common_struct_member(member_id_fix_header, member_flags_fix_header, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_fix_header, common_fix_header_ec))};
+            if (!common_fix_header_ec)
+            {
+                EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION, "Structure fix_header member TypeIdentifier inconsistent.");
+                return;
+            }
+            MemberName name_fix_header = "fix_header";
+            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_fix_header;
+            ann_custom_NewOrderSingle.reset();
+            CompleteMemberDetail detail_fix_header = TypeObjectUtils::build_complete_member_detail(name_fix_header, member_ann_builtin_fix_header, ann_custom_NewOrderSingle);
+            CompleteStructMember member_fix_header = TypeObjectUtils::build_complete_struct_member(common_fix_header, detail_fix_header);
+            TypeObjectUtils::add_complete_struct_member(member_seq_NewOrderSingle, member_fix_header);
+        }
+        {
             TypeIdentifierPair type_ids_DATS_Source;
             ReturnCode_t return_code_DATS_Source {eprosima::fastdds::dds::RETCODE_OK};
             return_code_DATS_Source =
@@ -82,7 +111,7 @@ void register_NewOrderSingle_type_identifier(
             }
             StructMemberFlag member_flags_DATS_Source = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
-            MemberId member_id_DATS_Source = 0x00000000;
+            MemberId member_id_DATS_Source = 0x00000001;
             bool common_DATS_Source_ec {false};
             CommonStructMember common_DATS_Source {TypeObjectUtils::build_common_struct_member(member_id_DATS_Source, member_flags_DATS_Source, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_DATS_Source, common_DATS_Source_ec))};
             if (!common_DATS_Source_ec)
@@ -120,7 +149,7 @@ void register_NewOrderSingle_type_identifier(
             }
             StructMemberFlag member_flags_DATS_Destination = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
-            MemberId member_id_DATS_Destination = 0x00000001;
+            MemberId member_id_DATS_Destination = 0x00000002;
             bool common_DATS_Destination_ec {false};
             CommonStructMember common_DATS_Destination {TypeObjectUtils::build_common_struct_member(member_id_DATS_Destination, member_flags_DATS_Destination, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_DATS_Destination, common_DATS_Destination_ec))};
             if (!common_DATS_Destination_ec)
@@ -158,7 +187,7 @@ void register_NewOrderSingle_type_identifier(
             }
             StructMemberFlag member_flags_DATS_SourceUser = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
-            MemberId member_id_DATS_SourceUser = 0x00000002;
+            MemberId member_id_DATS_SourceUser = 0x00000003;
             bool common_DATS_SourceUser_ec {false};
             CommonStructMember common_DATS_SourceUser {TypeObjectUtils::build_common_struct_member(member_id_DATS_SourceUser, member_flags_DATS_SourceUser, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_DATS_SourceUser, common_DATS_SourceUser_ec))};
             if (!common_DATS_SourceUser_ec)
@@ -196,7 +225,7 @@ void register_NewOrderSingle_type_identifier(
             }
             StructMemberFlag member_flags_DATS_DestinationUser = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
                     false, false, false, false);
-            MemberId member_id_DATS_DestinationUser = 0x00000003;
+            MemberId member_id_DATS_DestinationUser = 0x00000004;
             bool common_DATS_DestinationUser_ec {false};
             CommonStructMember common_DATS_DestinationUser {TypeObjectUtils::build_common_struct_member(member_id_DATS_DestinationUser, member_flags_DATS_DestinationUser, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_DATS_DestinationUser, common_DATS_DestinationUser_ec))};
             if (!common_DATS_DestinationUser_ec)
@@ -210,34 +239,6 @@ void register_NewOrderSingle_type_identifier(
             CompleteMemberDetail detail_DATS_DestinationUser = TypeObjectUtils::build_complete_member_detail(name_DATS_DestinationUser, member_ann_builtin_DATS_DestinationUser, ann_custom_NewOrderSingle);
             CompleteStructMember member_DATS_DestinationUser = TypeObjectUtils::build_complete_struct_member(common_DATS_DestinationUser, detail_DATS_DestinationUser);
             TypeObjectUtils::add_complete_struct_member(member_seq_NewOrderSingle, member_DATS_DestinationUser);
-        }
-        {
-            TypeIdentifierPair type_ids_fix_header;
-            ReturnCode_t return_code_fix_header {eprosima::fastdds::dds::RETCODE_OK};
-            return_code_fix_header =
-                eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->type_object_registry().get_type_identifiers(
-                "DistributedATS::Header", type_ids_fix_header);
-
-            if (eprosima::fastdds::dds::RETCODE_OK != return_code_fix_header)
-            {
-                ::DistributedATS::register_Header_type_identifier(type_ids_fix_header);
-            }
-            StructMemberFlag member_flags_fix_header = TypeObjectUtils::build_struct_member_flag(eprosima::fastdds::dds::xtypes::TryConstructFailAction::DISCARD,
-                    false, false, false, false);
-            MemberId member_id_fix_header = 0x00000004;
-            bool common_fix_header_ec {false};
-            CommonStructMember common_fix_header {TypeObjectUtils::build_common_struct_member(member_id_fix_header, member_flags_fix_header, TypeObjectUtils::retrieve_complete_type_identifier(type_ids_fix_header, common_fix_header_ec))};
-            if (!common_fix_header_ec)
-            {
-                EPROSIMA_LOG_ERROR(XTYPES_TYPE_REPRESENTATION, "Structure fix_header member TypeIdentifier inconsistent.");
-                return;
-            }
-            MemberName name_fix_header = "fix_header";
-            eprosima::fastcdr::optional<AppliedBuiltinMemberAnnotations> member_ann_builtin_fix_header;
-            ann_custom_NewOrderSingle.reset();
-            CompleteMemberDetail detail_fix_header = TypeObjectUtils::build_complete_member_detail(name_fix_header, member_ann_builtin_fix_header, ann_custom_NewOrderSingle);
-            CompleteStructMember member_fix_header = TypeObjectUtils::build_complete_struct_member(common_fix_header, detail_fix_header);
-            TypeObjectUtils::add_complete_struct_member(member_seq_NewOrderSingle, member_fix_header);
         }
         {
             TypeIdentifierPair type_ids_ClOrdID;
@@ -648,5 +649,6 @@ void register_NewOrderSingle_type_identifier(
         }
     }
 }
+
 } // namespace DistributedATS_NewOrderSingle
 

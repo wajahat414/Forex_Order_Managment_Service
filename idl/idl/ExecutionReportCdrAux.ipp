@@ -53,19 +53,19 @@ eProsima_user_DllExport size_t calculate_serialized_size(
 
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(0),
-                data.DATS_Source(), current_alignment);
+                data.fix_header(), current_alignment);
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(1),
-                data.DATS_Destination(), current_alignment);
+                data.DATS_Source(), current_alignment);
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(2),
-                data.DATS_SourceUser(), current_alignment);
+                data.DATS_Destination(), current_alignment);
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(3),
-                data.DATS_DestinationUser(), current_alignment);
+                data.DATS_SourceUser(), current_alignment);
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(4),
-                data.fix_header(), current_alignment);
+                data.DATS_DestinationUser(), current_alignment);
 
         calculated_size += calculator.calculate_member_serialized_size(eprosima::fastcdr::MemberId(5),
                 data.OrderID(), current_alignment);
@@ -153,11 +153,11 @@ eProsima_user_DllExport void serialize(
             eprosima::fastcdr::EncodingAlgorithmFlag::PLAIN_CDR);
 
     scdr
-        << eprosima::fastcdr::MemberId(0) << data.DATS_Source()
-        << eprosima::fastcdr::MemberId(1) << data.DATS_Destination()
-        << eprosima::fastcdr::MemberId(2) << data.DATS_SourceUser()
-        << eprosima::fastcdr::MemberId(3) << data.DATS_DestinationUser()
-        << eprosima::fastcdr::MemberId(4) << data.fix_header()
+        << eprosima::fastcdr::MemberId(0) << data.fix_header()
+        << eprosima::fastcdr::MemberId(1) << data.DATS_Source()
+        << eprosima::fastcdr::MemberId(2) << data.DATS_Destination()
+        << eprosima::fastcdr::MemberId(3) << data.DATS_SourceUser()
+        << eprosima::fastcdr::MemberId(4) << data.DATS_DestinationUser()
         << eprosima::fastcdr::MemberId(5) << data.OrderID()
         << eprosima::fastcdr::MemberId(6) << data.OrigClOrdID()
         << eprosima::fastcdr::MemberId(7) << data.ExecID()
@@ -200,23 +200,23 @@ eProsima_user_DllExport void deserialize(
                 switch (mid.id)
                 {
                                         case 0:
-                                                dcdr >> data.DATS_Source();
+                                                dcdr >> data.fix_header();
                                             break;
 
                                         case 1:
-                                                dcdr >> data.DATS_Destination();
+                                                dcdr >> data.DATS_Source();
                                             break;
 
                                         case 2:
-                                                dcdr >> data.DATS_SourceUser();
+                                                dcdr >> data.DATS_Destination();
                                             break;
 
                                         case 3:
-                                                dcdr >> data.DATS_DestinationUser();
+                                                dcdr >> data.DATS_SourceUser();
                                             break;
 
                                         case 4:
-                                                dcdr >> data.fix_header();
+                                                dcdr >> data.DATS_DestinationUser();
                                             break;
 
                                         case 5:
@@ -347,8 +347,14 @@ void serialize_key(
 
 
 
+
+
+
+
     static_cast<void>(scdr);
     static_cast<void>(data);
+                        serialize_key(scdr, data.fix_header());
+
                         scdr << data.DATS_Source();
 
                         scdr << data.DATS_Destination();
@@ -356,8 +362,6 @@ void serialize_key(
                         scdr << data.DATS_SourceUser();
 
                         scdr << data.DATS_DestinationUser();
-
-                        serialize_key(scdr, data.fix_header());
 
                         scdr << data.OrderID();
 

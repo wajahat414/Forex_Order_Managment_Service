@@ -28,6 +28,10 @@
         "condition_variable": "cpp",
         "sstream": "cpp",
         "regex": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "__bit_reference": "cpp"
     }
 }

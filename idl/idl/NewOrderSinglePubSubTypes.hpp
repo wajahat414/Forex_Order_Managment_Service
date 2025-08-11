@@ -49,7 +49,7 @@ namespace DistributedATS_NewOrderSingle
     {
     public:
 
-        typedef ::DistributedATS_NewOrderSingle::NewOrderSingle type;
+        typedef NewOrderSingle type;
 
         eProsima_user_DllExport NewOrderSinglePubSubType();
 
@@ -121,7 +121,6 @@ namespace DistributedATS_NewOrderSingle
         unsigned char* key_buffer_;
 
     };
-
 } // namespace DistributedATS_NewOrderSingle
 
 #endif // FAST_DDS_GENERATED__DISTRIBUTEDATS_NEWORDERSINGLE_NEWORDERSINGLE_PUBSUBTYPES_HPP

@@ -1,0 +1,34 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_MarketDataSnapshotFullRefresh
+{
+
+	struct NoMDEntries
+	{
+		char MDEntryType;
+		float MDEntryPx;
+		long MDEntrySize;
+		char TimeInForce;
+		string ExecInst;
+		string Text;
+	};
+	typedef sequence<NoMDEntries> NoMDEntriesSeq;
+
+	
+	struct MarketDataSnapshotFullRefresh
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+		string MDReqID;
+		string Symbol;
+		string SecurityExchange;
+		NoMDEntriesSeq c_NoMDEntries;
+	};
+};

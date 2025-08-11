@@ -57,7 +57,7 @@ namespace DistributedATS_ExecutionReport {
             SerializedPayload_t& payload,
             DataRepresentationId_t data_representation)
     {
-        const ::DistributedATS_ExecutionReport::ExecutionReport* p_type = static_cast<const ::DistributedATS_ExecutionReport::ExecutionReport*>(data);
+        const ExecutionReport* p_type = static_cast<const ExecutionReport*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.max_size);
@@ -96,7 +96,7 @@ namespace DistributedATS_ExecutionReport {
         try
         {
             // Convert DATA to pointer of your type
-            ::DistributedATS_ExecutionReport::ExecutionReport* p_type = static_cast<::DistributedATS_ExecutionReport::ExecutionReport*>(data);
+            ExecutionReport* p_type = static_cast<ExecutionReport*>(data);
 
             // Object that manages the raw buffer.
             eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.length);
@@ -130,7 +130,7 @@ namespace DistributedATS_ExecutionReport {
                 eprosima::fastcdr::CdrVersion::XCDRv1 :eprosima::fastcdr::CdrVersion::XCDRv2);
             size_t current_alignment {0};
             return static_cast<uint32_t>(calculator.calculate_serialized_size(
-                        *static_cast<const ::DistributedATS_ExecutionReport::ExecutionReport*>(data), current_alignment)) +
+                        *static_cast<const ExecutionReport*>(data), current_alignment)) +
                     4u /*encapsulation*/;
         }
         catch (eprosima::fastcdr::exception::Exception& /*exception*/)
@@ -141,13 +141,13 @@ namespace DistributedATS_ExecutionReport {
 
     void* ExecutionReportPubSubType::create_data()
     {
-        return reinterpret_cast<void*>(new ::DistributedATS_ExecutionReport::ExecutionReport());
+        return reinterpret_cast<void*>(new ExecutionReport());
     }
 
     void ExecutionReportPubSubType::delete_data(
             void* data)
     {
-        delete(reinterpret_cast<::DistributedATS_ExecutionReport::ExecutionReport*>(data));
+        delete(reinterpret_cast<ExecutionReport*>(data));
     }
 
     bool ExecutionReportPubSubType::compute_key(
@@ -160,7 +160,7 @@ namespace DistributedATS_ExecutionReport {
             return false;
         }
 
-        ::DistributedATS_ExecutionReport::ExecutionReport data;
+        ExecutionReport data;
         if (deserialize(payload, static_cast<void*>(&data)))
         {
             return compute_key(static_cast<void*>(&data), handle, force_md5);
@@ -179,7 +179,7 @@ namespace DistributedATS_ExecutionReport {
             return false;
         }
 
-        const ::DistributedATS_ExecutionReport::ExecutionReport* p_type = static_cast<const ::DistributedATS_ExecutionReport::ExecutionReport*>(data);
+        const ExecutionReport* p_type = static_cast<const ExecutionReport*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(key_buffer_),

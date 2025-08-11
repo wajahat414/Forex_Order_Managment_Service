@@ -9,8 +9,9 @@
 #include <fastdds/dds/publisher/DataWriter.hpp>
 
 // Include the generated types
-#include "NewOrderSinglePubSubTypes.hpp"
 #include "NewOrderSingle.hpp"
+#include "NewOrderSinglePubSubTypes.hpp"
+#include <NewOrderSingle.hpp>
 
 using namespace eprosima::fastdds::dds;
 

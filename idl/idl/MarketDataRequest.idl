@@ -1,0 +1,37 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_MarketDataRequest
+{
+
+	struct NoMDEntryTypes
+	{
+		char MDEntryType;
+	};
+	typedef sequence<NoMDEntryTypes> NoMDEntryTypesSeq;
+
+	struct NoRelatedSym
+	{
+		string Symbol;
+		string SecurityExchange;
+	};
+	typedef sequence<NoRelatedSym> NoRelatedSymSeq;
+
+	
+	struct MarketDataRequest
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+		string MDReqID;
+		char SubscriptionRequestType;
+		long MarketDepth;
+		NoMDEntryTypesSeq c_NoMDEntryTypes;
+		NoRelatedSymSeq c_NoRelatedSym;
+	};
+};

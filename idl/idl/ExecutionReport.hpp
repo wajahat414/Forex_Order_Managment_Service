@@ -83,6 +83,8 @@ public:
     eProsima_user_DllExport ExecutionReport(
             const ExecutionReport& x)
     {
+                    m_fix_header = x.m_fix_header;
+
                     m_DATS_Source = x.m_DATS_Source;
 
                     m_DATS_Destination = x.m_DATS_Destination;
@@ -90,8 +92,6 @@ public:
                     m_DATS_SourceUser = x.m_DATS_SourceUser;
 
                     m_DATS_DestinationUser = x.m_DATS_DestinationUser;
-
-                    m_fix_header = x.m_fix_header;
 
                     m_OrderID = x.m_OrderID;
 
@@ -146,11 +146,11 @@ public:
     eProsima_user_DllExport ExecutionReport(
             ExecutionReport&& x) noexcept
     {
+        m_fix_header = std::move(x.m_fix_header);
         m_DATS_Source = std::move(x.m_DATS_Source);
         m_DATS_Destination = std::move(x.m_DATS_Destination);
         m_DATS_SourceUser = std::move(x.m_DATS_SourceUser);
         m_DATS_DestinationUser = std::move(x.m_DATS_DestinationUser);
-        m_fix_header = std::move(x.m_fix_header);
         m_OrderID = std::move(x.m_OrderID);
         m_OrigClOrdID = std::move(x.m_OrigClOrdID);
         m_ExecID = std::move(x.m_ExecID);
@@ -183,6 +183,8 @@ public:
             const ExecutionReport& x)
     {
 
+                    m_fix_header = x.m_fix_header;
+
                     m_DATS_Source = x.m_DATS_Source;
 
                     m_DATS_Destination = x.m_DATS_Destination;
@@ -190,8 +192,6 @@ public:
                     m_DATS_SourceUser = x.m_DATS_SourceUser;
 
                     m_DATS_DestinationUser = x.m_DATS_DestinationUser;
-
-                    m_fix_header = x.m_fix_header;
 
                     m_OrderID = x.m_OrderID;
 
@@ -248,11 +248,11 @@ public:
             ExecutionReport&& x) noexcept
     {
 
+        m_fix_header = std::move(x.m_fix_header);
         m_DATS_Source = std::move(x.m_DATS_Source);
         m_DATS_Destination = std::move(x.m_DATS_Destination);
         m_DATS_SourceUser = std::move(x.m_DATS_SourceUser);
         m_DATS_DestinationUser = std::move(x.m_DATS_DestinationUser);
-        m_fix_header = std::move(x.m_fix_header);
         m_OrderID = std::move(x.m_OrderID);
         m_OrigClOrdID = std::move(x.m_OrigClOrdID);
         m_ExecID = std::move(x.m_ExecID);
@@ -285,11 +285,11 @@ public:
     eProsima_user_DllExport bool operator ==(
             const ExecutionReport& x) const
     {
-        return (m_DATS_Source == x.m_DATS_Source &&
+        return (m_fix_header == x.m_fix_header &&
+           m_DATS_Source == x.m_DATS_Source &&
            m_DATS_Destination == x.m_DATS_Destination &&
            m_DATS_SourceUser == x.m_DATS_SourceUser &&
            m_DATS_DestinationUser == x.m_DATS_DestinationUser &&
-           m_fix_header == x.m_fix_header &&
            m_OrderID == x.m_OrderID &&
            m_OrigClOrdID == x.m_OrigClOrdID &&
            m_ExecID == x.m_ExecID &&
@@ -323,6 +323,45 @@ public:
     {
         return !(*this == x);
     }
+
+    /*!
+     * @brief This function copies the value in member fix_header
+     * @param _fix_header New value to be copied in member fix_header
+     */
+    eProsima_user_DllExport void fix_header(
+            const DistributedATS::Header& _fix_header)
+    {
+        m_fix_header = _fix_header;
+    }
+
+    /*!
+     * @brief This function moves the value in member fix_header
+     * @param _fix_header New value to be moved in member fix_header
+     */
+    eProsima_user_DllExport void fix_header(
+            DistributedATS::Header&& _fix_header)
+    {
+        m_fix_header = std::move(_fix_header);
+    }
+
+    /*!
+     * @brief This function returns a constant reference to member fix_header
+     * @return Constant reference to member fix_header
+     */
+    eProsima_user_DllExport const DistributedATS::Header& fix_header() const
+    {
+        return m_fix_header;
+    }
+
+    /*!
+     * @brief This function returns a reference to member fix_header
+     * @return Reference to member fix_header
+     */
+    eProsima_user_DllExport DistributedATS::Header& fix_header()
+    {
+        return m_fix_header;
+    }
+
 
     /*!
      * @brief This function copies the value in member DATS_Source
@@ -477,45 +516,6 @@ public:
     eProsima_user_DllExport std::string& DATS_DestinationUser()
     {
         return m_DATS_DestinationUser;
-    }
-
-
-    /*!
-     * @brief This function copies the value in member fix_header
-     * @param _fix_header New value to be copied in member fix_header
-     */
-    eProsima_user_DllExport void fix_header(
-            const DistributedATS::Header& _fix_header)
-    {
-        m_fix_header = _fix_header;
-    }
-
-    /*!
-     * @brief This function moves the value in member fix_header
-     * @param _fix_header New value to be moved in member fix_header
-     */
-    eProsima_user_DllExport void fix_header(
-            DistributedATS::Header&& _fix_header)
-    {
-        m_fix_header = std::move(_fix_header);
-    }
-
-    /*!
-     * @brief This function returns a constant reference to member fix_header
-     * @return Constant reference to member fix_header
-     */
-    eProsima_user_DllExport const DistributedATS::Header& fix_header() const
-    {
-        return m_fix_header;
-    }
-
-    /*!
-     * @brief This function returns a reference to member fix_header
-     * @return Reference to member fix_header
-     */
-    eProsima_user_DllExport DistributedATS::Header& fix_header()
-    {
-        return m_fix_header;
     }
 
 
@@ -1230,11 +1230,11 @@ public:
 
 private:
 
+    DistributedATS::Header m_fix_header;
     std::string m_DATS_Source;
     std::string m_DATS_Destination;
     std::string m_DATS_SourceUser;
     std::string m_DATS_DestinationUser;
-    DistributedATS::Header m_fix_header;
     std::string m_OrderID;
     std::string m_OrigClOrdID;
     std::string m_ExecID;

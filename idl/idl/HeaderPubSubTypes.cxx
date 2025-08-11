@@ -57,7 +57,7 @@ namespace DistributedATS {
             SerializedPayload_t& payload,
             DataRepresentationId_t data_representation)
     {
-        const ::DistributedATS::Header* p_type = static_cast<const ::DistributedATS::Header*>(data);
+        const Header* p_type = static_cast<const Header*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.max_size);
@@ -96,7 +96,7 @@ namespace DistributedATS {
         try
         {
             // Convert DATA to pointer of your type
-            ::DistributedATS::Header* p_type = static_cast<::DistributedATS::Header*>(data);
+            Header* p_type = static_cast<Header*>(data);
 
             // Object that manages the raw buffer.
             eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(payload.data), payload.length);
@@ -130,7 +130,7 @@ namespace DistributedATS {
                 eprosima::fastcdr::CdrVersion::XCDRv1 :eprosima::fastcdr::CdrVersion::XCDRv2);
             size_t current_alignment {0};
             return static_cast<uint32_t>(calculator.calculate_serialized_size(
-                        *static_cast<const ::DistributedATS::Header*>(data), current_alignment)) +
+                        *static_cast<const Header*>(data), current_alignment)) +
                     4u /*encapsulation*/;
         }
         catch (eprosima::fastcdr::exception::Exception& /*exception*/)
@@ -141,13 +141,13 @@ namespace DistributedATS {
 
     void* HeaderPubSubType::create_data()
     {
-        return reinterpret_cast<void*>(new ::DistributedATS::Header());
+        return reinterpret_cast<void*>(new Header());
     }
 
     void HeaderPubSubType::delete_data(
             void* data)
     {
-        delete(reinterpret_cast<::DistributedATS::Header*>(data));
+        delete(reinterpret_cast<Header*>(data));
     }
 
     bool HeaderPubSubType::compute_key(
@@ -160,7 +160,7 @@ namespace DistributedATS {
             return false;
         }
 
-        ::DistributedATS::Header data;
+        Header data;
         if (deserialize(payload, static_cast<void*>(&data)))
         {
             return compute_key(static_cast<void*>(&data), handle, force_md5);
@@ -179,7 +179,7 @@ namespace DistributedATS {
             return false;
         }
 
-        const ::DistributedATS::Header* p_type = static_cast<const ::DistributedATS::Header*>(data);
+        const Header* p_type = static_cast<const Header*>(data);
 
         // Object that manages the raw buffer.
         eprosima::fastcdr::FastBuffer fastbuffer(reinterpret_cast<char*>(key_buffer_),

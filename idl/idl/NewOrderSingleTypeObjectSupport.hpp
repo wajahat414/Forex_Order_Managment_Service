@@ -45,7 +45,7 @@ namespace DistributedATS_NewOrderSingle {
  *        Hash TypeIdentifiers require to fill the TypeObject information and hash it, consequently, the TypeObject is
  *        indirectly registered as well.
  *
- * @param[out] type_ids TypeIdentifier of the registered type.
+ * @param[out] TypeIdentifier of the registered type.
  *             The returned TypeIdentifier corresponds to the complete TypeIdentifier in case of hashed TypeIdentifiers.
  *             Invalid TypeIdentifier is returned in case of error.
  */

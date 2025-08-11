@@ -23,6 +23,7 @@
 #define FAST_DDS_GENERATED__DISTRIBUTEDATS_HEADERCDRAUX_HPP
 
 #include "Header.hpp"
+
 constexpr uint32_t DistributedATS_Header_max_cdr_typesize {1584UL};
 constexpr uint32_t DistributedATS_Header_max_key_cdr_typesize {0UL};
 

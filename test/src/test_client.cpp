@@ -6,6 +6,7 @@
 #include "OrderMessage.hpp"
 #include "OrderMessagePubSubTypes.hpp"
 #include <Common.h>
+#include <random>
 
 using namespace eprosima::fastdds::dds;
 
@@ -105,14 +106,13 @@ public:
                 std::cerr << "❌ Failed to register OrderRequest type" << std::endl;
                 return false;
             }
-            std::string type_name = "DistributedATS_NewOrderSingle::NewOrderSingle";
 
             std::cout << "✅ Registered type: " << type_.get_type_name() << std::endl;
 
             // Create topic with RAII cleanup
             TopicQos tqos;
             Topic *raw_topic = participant_->create_topic(
-                NEW_ORDER_REQUEST_TOPIC_NAME, type_name, tqos);
+                NEW_ORDER_REQUEST_TOPIC_NAME, type_.get_type_name(), tqos);
 
             if (raw_topic == nullptr)
             {
@@ -318,6 +318,26 @@ public:
     }
 };
 
+std::string generate_unique_order_id()
+{
+    // Get current timestamp in microseconds for high precision
+    auto now = std::chrono::high_resolution_clock::now();
+    auto timestamp = std::chrono::duration_cast<std::chrono::microseconds>(
+                         now.time_since_epoch())
+                         .count();
+
+    // Generate random component for additional uniqueness
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution<> dis(1000, 9999);
+
+    // Format: ORD_TIMESTAMP_RANDOM (financial industry standard)
+    std::ostringstream oss;
+    oss << "ORD_" << timestamp << "_" << dis(gen);
+
+    return oss.str();
+}
+
 /**
  * @brief Main test application
  * Tests order publication to the OMS with various order types
@@ -326,6 +346,8 @@ int main()
 {
     std::cout << "=== Order Management Service Test Client ===" << std::endl;
     std::cout << "Topic name: " << NEW_ORDER_REQUEST_TOPIC_NAME << std::endl;
+
+    int a = 1;
 
     OrderClient client;
     if (!client.init())
@@ -344,12 +366,19 @@ int main()
     std::cout << "\n🚀 Starting to send test orders..." << std::endl;
 
     // Test limit buy order
-    client.send_order("ORDER_001", "BTC-USD", OrderSide::BUY, 1000.0, 1100);
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    do
+    {
 
-    std::cout << "\n✅ Test complete. Check OMS console for processing results." << std::endl;
-    std::cout << "Press Enter to exit..." << std::endl;
-    std::cin.get();
+        auto order_id = generate_unique_order_id();
+        auto side = a == 1 ? OrderSide::SELL : OrderSide::BUY;
+        client.send_order(order_id, "BTC-USD", side, 1000.0, 1100);
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        std::cout << "\n✅ Test complete. Check OMS console for processing results." << std::endl;
+        std::cout << "input 0 to exit... any other to keep sending new order" << std::endl;
+        a = std::cin.get();
+
+    } while (a != 0);
 
     return 0;
 }

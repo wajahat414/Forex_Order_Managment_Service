@@ -1,0 +1,26 @@
+/* Don't modify, automatically generated file by QuickFIX2FastDDS.py*/
+#include "Header.idl"
+
+module DistributedATS_OrderMassCancelReport
+{
+
+	
+	struct OrderMassCancelReport
+	{
+		string DATS_Source;
+     		string DATS_Destination;
+    		string DATS_SourceUser;
+    		string DATS_DestinationUser;
+
+
+		DistributedATS::Header fix_header;
+
+		string OrderID;
+		char MassCancelRequestType;
+		char MassCancelResponse;
+		string Symbol;
+		string SecurityExchange;
+		unsigned long long TransactTime;
+		string Text;
+	};
+};
