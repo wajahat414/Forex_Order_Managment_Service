@@ -24,5 +24,5 @@ public:
     bool route_to_matching_engine(const OrderRequest &order);
 
 private:
-      OrderManagmentService::Application &application;
+    OrderManagmentService::Application &application;
 };

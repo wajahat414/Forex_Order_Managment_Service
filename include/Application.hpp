@@ -2,6 +2,7 @@
 #include "DataWriterContainer.hpp"
 #include <log4cxx/logger.h>
 #include <OrderMessage.hpp>
+#include <ExecutionReport.hpp>
 namespace OrderManagmentService
 {
 
@@ -21,6 +22,7 @@ namespace OrderManagmentService
             return _dataWriterContainer;
         }
         bool onOrderRequestMessage(const OrderRequest &order_request);
+        bool onExecutionReportRecieved(const DistributedATS_ExecutionReport::ExecutionReport &executionReport);
 
         Application(std::string dataService, std::string senderCompId, DataWriterContainerPtr dataWriterContainer) : _dataService(dataService), _senderCompId(senderCompId), _dataWriterContainer(dataWriterContainer) {};
     };

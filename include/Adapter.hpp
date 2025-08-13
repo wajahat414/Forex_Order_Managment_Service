@@ -2,11 +2,15 @@
 
 #include <OrderMessage.hpp>
 #include <NewOrderSingle.hpp>
+#include <OrderResponseReport.hpp>
+#include <ExecutionReport.hpp>
 
-class OrderAdapter
+using namespace OMS;
+class Adapter
 {
 public:
     static DistributedATS_NewOrderSingle::NewOrderSingle requestToNewOrderSingle(const OrderRequest &order);
+    static OrderResponseReport executionReportToOrderReponseReport(const DistributedATS_ExecutionReport::ExecutionReport &executionReport);
 
 private:
     static char convertOrderSideToChar(OrderSide side);
@@ -24,4 +28,9 @@ private:
      * Essential for financial message timestamping and audit trails
      */
     static u_int64_t getCurrentUTCTimestamp();
+
+    static OrderStatus convertExecStatusToOrderStatus(char ord_status);
+
+    static OrderSide convertCharToOrderSide(char side);
+    static OrderType convertCharToOrderType(char ord_type);
 };

@@ -1,15 +1,16 @@
-use crate::execution_report::ExecutionReport;
+use crate::report::{self, ExecutionReport};
 use anyhow::{Context, Result};
 use log::{error, info, warn};
 use rustdds::no_key::{DataReader, DataSample};
 use rustdds::*;
+use serde_json::value;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tokio::time::sleep;
 
 /// DDS topic name for execution reports matching C++ OMS configuration
-const EXECUTION_REPORT_TOPIC_NAME: &str = "Execution_report";
+const EXECUTION_REPORT_TOPIC_NAME: &str = "EXECUTION_REPORT_TOPIC";
 const DEFAULT_DOMAIN_ID: u16 = 0;
 
 /// ExecutionReport listener following OMS architecture patterns for real-time order tracking
@@ -40,12 +41,7 @@ impl ExecutionReportListener {
         // Configure QoS for reliable financial message delivery following FastDDS best practices
         let qos = QosPolicyBuilder::new()
             .reliability(policy::Reliability::Reliable {
-                max_blocking_time: rustdds::Duration::from_millis(100), // Financial trading timeout
-            })
-            .durability(policy::Durability::TransientLocal) // Persist for late-joining subscribers
-            .history(policy::History::KeepLast { depth: 1000 }) // Large buffer for execution reports
-            .liveliness(policy::Liveliness::Automatic {
-                lease_duration: rustdds::Duration::from_secs(30), // Connection monitoring
+                max_blocking_time: rustdds::Duration::ZERO,
             })
             .build();
 
@@ -67,8 +63,7 @@ impl ExecutionReportListener {
         // Create data reader for execution report reception with proper FastDDS configuration
         let reader = subscriber
             .create_datareader_no_key::<ExecutionReport, CDRDeserializerAdapter<ExecutionReport>>(
-                &topic,
-                Some(qos),
+                &topic, None,
             )
             .context("Failed to create ExecutionReport reader with FastDDS compatibility")?;
 
@@ -92,102 +87,37 @@ impl ExecutionReportListener {
         })
     }
 
-    /// Wait for OMS/Matching Engine discovery with comprehensive monitoring
-    pub async fn wait_for_discovery(&self, timeout_seconds: u64) -> Result<bool> {
-        info!("⏳ Waiting for OMS/Matching Engine discovery for ExecutionReports...");
-
-        let timeout_duration = Duration::from_secs(timeout_seconds);
-        let start_time = std::time::Instant::now();
-
-        while start_time.elapsed() < timeout_duration {
-            let matched_publications = self.reader.get_matched_publications();
-
-            if !matched_publications.is_empty() {
-                info!(
-                    "✅ Found {} OMS/Matching Engine publishers for ExecutionReports!",
-                    matched_publications.len()
-                );
-
-                // Log discovered endpoints for debugging following OMS patterns
-                for publication in &matched_publications {
-                    info!("🔍 Discovered ExecutionReport publisher: {:?}", publication);
-                }
-
-                return Ok(true);
-            }
-
-            print!(".");
-            std::io::Write::flush(&mut std::io::stdout()).unwrap();
-            sleep(Duration::from_secs(1)).await;
-        }
-
-        warn!(
-            "❌ ExecutionReport discovery timeout after {} seconds",
-            timeout_seconds
-        );
-        warn!(
-            "   Check if OMS/Matching Engine is running and publishing to topic '{}'",
-            EXECUTION_REPORT_TOPIC_NAME
-        );
-        Ok(false)
-    }
-
     /// Read all available execution reports from the topic following OMS real-time processing patterns
+
     pub async fn read_execution_reports(&mut self) -> Result<Vec<ExecutionReport>> {
         let mut reports = Vec::new();
 
-        // Read all available execution reports using no-key reader following FastDDS patterns
+        // Keep reading until no more samples are available
         loop {
             match self.reader.take_next_sample() {
-                Ok(Some(data_sample)) => {
-                    match data_sample {
-                        DataSample::Value { value, sample_info } => {
-                            info!(
-                                "📨 Received ExecutionReport: ExecID={}, OrderID={}, Status={}",
-                                value.exec_id,
-                                value.order_id,
-                                value.get_execution_status()
-                            );
+                Ok(Some(value)) => {
+                    let value = value.value().clone();
+                    info!(
+                        "📨 Received ExecutionReport: OrderID={}, Status={}",
+                        value.order_id, value.ord_status,
+                    );
 
-                            // Log detailed execution information for financial audit trail
-                            self.log_execution_report(&value);
+                    // OMS business logic
+                    self.log_execution_report(&value);
+                    self.update_order_cache(&value);
+                    self.trigger_callbacks(&value).await;
 
-                            // Update order status cache for tracking following OMS requirements
-                            self.update_order_cache(&value);
-
-                            // Trigger callbacks for real-time processing following OMS architecture
-                            self.trigger_callbacks(&value).await;
-
-                            // Add to results collection
-                            reports.push(value);
-                        }
-                        _ => {
-                            // Handle non-value samples (dispose, etc.) following FastDDS best practices
-                            warn!("⚠️  Received non-value ExecutionReport sample");
-                        }
-                    }
+                    reports.push(value);
                 }
                 Ok(None) => {
-                    // No more data available - normal termination condition
+                    // No more samples in queue — exit loop
                     break;
                 }
                 Err(e) => {
-                    // Error reading from DDS - log for financial system monitoring
-                    error!("❌ Failed to read ExecutionReport from OMS: {}", e);
-                    return Err(anyhow::anyhow!(
-                        "DDS reader error during ExecutionReport processing: {}",
-                        e
-                    ));
+                    error!("❌ Error reading ExecutionReport: {}", e);
+                    break;
                 }
             }
-        }
-
-        // Log summary for financial audit trail following OMS requirements
-        if !reports.is_empty() {
-            info!(
-                "✅ Successfully processed {} ExecutionReports from OMS/Matching Engine",
-                reports.len()
-            );
         }
 
         Ok(reports)
@@ -242,8 +172,7 @@ impl ExecutionReportListener {
 
     /// Check connection status to OMS/Matching Engine following monitoring best practices
     pub fn get_connection_status(&self) -> ExecutionReportConnectionStatus {
-        let matched_publications = self.reader.get_matched_publications().len();
-
+        let matched_publications = 0;
         ExecutionReportConnectionStatus {
             domain_id: DEFAULT_DOMAIN_ID,
             topic_name: EXECUTION_REPORT_TOPIC_NAME.to_string(),

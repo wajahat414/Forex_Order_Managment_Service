@@ -17,7 +17,8 @@ namespace OrderManagmentService
         {
             _execution_report_topic_tuple = participant_ptr->make_topic<DistributedATS_ExecutionReport::ExecutionReportPubSubType, DistributedATS_ExecutionReport::ExecutionReport>(EXECUTION_REPORT_TOPIC_NAME);
 
-            _execution_report_data_reader_tuple = participant_ptr->make_data_reader_tuple(_execution_report_topic_tuple, new OrderManagmentService::ExecutionReportDataReaderListenerImpl(application), "FILTERED_EXEC_REPORT", target_comp_id_filter, {name});
+            // _execution_report_data_reader_tuple = participant_ptr->make_data_reader_tuple(_execution_report_topic_tuple, new OrderManagmentService::ExecutionReportDataReaderListenerImpl(application), "FILTERED_EXEC_REPORT", target_comp_id_filter, {name});
+            _execution_report_data_reader_tuple = participant_ptr->make_data_reader_tuple(_execution_report_topic_tuple, new OrderManagmentService::ExecutionReportDataReaderListenerImpl(application));
         }
     };
 

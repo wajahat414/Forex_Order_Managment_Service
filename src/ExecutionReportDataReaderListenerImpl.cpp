@@ -22,6 +22,11 @@ auto const exec_report_processor = [](OrderManagmentService::Application &applic
     ExecutionReportLogger::log(ss, execution_report);
 
     LOG4CXX_INFO(logger, "Execution Report " << ss.str());
+    bool response = application.onExecutionReportRecieved(execution_report);
+    if (response)
+    {
+        LOG4CXX_INFO(logger, "OrderResponse Report Published Successfully");
+    }
 };
 
 namespace OrderManagmentService
