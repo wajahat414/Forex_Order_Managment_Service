@@ -1,5 +1,6 @@
 use anyhow::Result;
 use log::info;
+use metrics::{counter, histogram};
 use oms_rust_client::report::ExecutionReport;
 use oms_rust_client::report::ExecutionReportListener;
 use oms_rust_client::report::OrderResponseListener;
@@ -8,7 +9,7 @@ use std::fs::OpenOptions;
 use std::io::{self, Write};
 use std::time::Duration;
 use tokio::time::sleep;
-
+use tokio::time::Instant;
 #[tokio::main]
 async fn main() -> Result<()> {
     // Initialize logging following OMS patterns
@@ -102,21 +103,21 @@ async fn main() -> Result<()> {
     let mut listener_for_background = OrderResponseListener::new().await?;
     let mut execution_report_listener_for_background = ExecutionReportListener::new().await?;
     tokio::spawn(async move {
-        // if let Err(e) = listener_for_background.start_listening().await {
-        //     log::error!(
-        //         "ExecutionReport listener error following OMS patterns: {}",
-        //         e
-        //     );
-        // }
-        if let Err(e) = execution_report_listener_for_background
-            .start_listening()
-            .await
-        {
+        if let Err(e) = listener_for_background.start_listening().await {
             log::error!(
                 "ExecutionReport listener error following OMS patterns: {}",
                 e
             );
         }
+        // if let Err(e) = execution_report_listener_for_background
+        //     .start_listening()
+        //     .await
+        // {
+        //     log::error!(
+        //         "ExecutionReport listener error following OMS patterns: {}",
+        //         e
+        //     );
+        // }
     });
 
     println!("\n🚀 Enhanced Financial Trading Client Ready!");
@@ -140,15 +141,35 @@ async fn main() -> Result<()> {
         match input.trim() {
             "1" => {
                 // Send OrderRequest to OMS following architecture patterns
-                match order_client
-                    .send_market_order("BTC-USD", OrderSide::BUY, 1000.0)
-                    .await
-                {
-                    Ok(order_id) => {
-                        println!("✅ Sent OrderRequest to OMS: {}", order_id);
-                        println!("   Monitor execution reports for status updates");
+                loop {
+                    let mut count = 0;
+                    let start = Instant::now();
+                    let messages_count = 0;
+                    match order_client
+                        .send_market_order("BTC-USD", OrderSide::BUY, 1000.0)
+                        .await
+                    {
+                        Ok(order_id) => {
+                            println!("✅ Sent OrderRequest to OMS: {}", order_id);
+                            println!("   Monitor execution reports for status updates");
+                        }
+                        Err(e) => eprintln!("❌ Failed to send OrderRequest: {}", e),
                     }
-                    Err(e) => eprintln!("❌ Failed to send OrderRequest: {}", e),
+                    counter!("process.order_sent_count").increment(messages_count);
+                    if count >= 1000 {
+                        let delta = start.elapsed();
+                        info!(
+                            "time taken for sending#{} Seconds{} milli{}",
+                            count,
+                            delta.as_secs(),
+                            delta.subsec_millis()
+                        );
+                        histogram!("process.order_sent").record(delta);
+
+                        break;
+                    }
+
+                    count += 1;
                 }
             }
 

@@ -1,12 +1,13 @@
 use crate::report::{self, OrderResponseReport};
 use anyhow::{Context, Result};
 use log::{error, info, warn};
+use metrics::{counter, histogram};
 use rustdds::no_key::{DataReader, DataSample};
 use rustdds::*;
 use serde_json::value;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 use tokio::time::sleep;
 
 /// DDS topic name for execution reports matching C++ OMS configuration
@@ -94,9 +95,29 @@ impl OrderResponseListener {
         let mut reports = Vec::new();
 
         // Keep reading until no more samples are available
+        let mut start: Instant = Instant::now();
+
+        let mut recieved_count = 0;
+        let mut count = 0;
         loop {
             match self.reader.take_next_sample() {
                 Ok(Some(value)) => {
+                    counter!("process.recieved_count").increment(recieved_count);
+                    count += 1;
+                    if count == 1 {
+                        start = Instant::now();
+                    }
+
+                    if (count >= 1000) {
+                        let delta = start.elapsed();
+                        histogram!("process.total_recieved_time").record(delta);
+                        info!(
+                            "total time taken for recieving Seconds {}, miliseconds {}",
+                            delta.as_secs(),
+                            delta.subsec_millis()
+                        );
+                    }
+
                     let value = value.value().clone();
                     info!(
                         "📨 Received OrderResponseReport: OrderID={}, Status={}",
