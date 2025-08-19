@@ -1,0 +1,284 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "Clang",
+	"compiler-simulate-id" : "",
+	"config" : "Release",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-cur-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"dir-top-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-top-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/include",
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/common",
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl",
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/log4cxx/include",
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/dds/include",
+		"/opt/homebrew/include",
+		"/opt/homebrew/Cellar/openssl@3/3.5.1/include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : 
+	[
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/oms_modules.dir"
+	],
+	"module-dir" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/oms_modular_monolith.dir",
+	"sources" : 
+	{
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/BusinessMessageRejectPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/BusinessMessageRejectPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/BusinessMessageRejectTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/BusinessMessageRejectTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/ExecutionReportPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/ExecutionReportPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/ExecutionReportTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/ExecutionReportTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/HeaderPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/HeaderPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/HeaderTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/HeaderTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/HeartbeatPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/HeartbeatPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/HeartbeatTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/HeartbeatTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/LogonPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/LogonPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/LogonTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/LogonTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/LogoutPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/LogoutPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/LogoutTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/LogoutTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataIncrementalRefreshPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataIncrementalRefreshPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataIncrementalRefreshTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataIncrementalRefreshTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataSnapshotFullRefreshPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataSnapshotFullRefreshPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/MarketDataSnapshotFullRefreshTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/MarketDataSnapshotFullRefreshTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/NewOrderSinglePubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/NewOrderSinglePubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/NewOrderSingleTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/NewOrderSingleTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelRejectPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelRejectPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelRejectTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelRejectTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelReplaceRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelReplaceRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelReplaceRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelReplaceRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderCancelRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderCancelRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassCancelReportPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassCancelReportPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassCancelReportTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassCancelReportTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassCancelRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassCancelRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassCancelRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassCancelRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassStatusRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassStatusRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMassStatusRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMassStatusRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMessagePubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMessagePubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderMessageTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderMessageTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderResponseReportPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderResponseReportPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/OrderResponseReportTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/OrderResponseReportTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/SecurityListPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/SecurityListPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/SecurityListRequestPubSubTypes.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/SecurityListRequestPubSubTypes.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/SecurityListRequestTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/SecurityListRequestTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/idl/idl/SecurityListTypeObjectSupport.cxx.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/idl/idl/SecurityListTypeObjectSupport.cxx"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/Adapter.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/Adapter.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/Application.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/Application.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/ExecutionReportDataReaderListenerImpl.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/ExecutionReportDataReaderListenerImpl.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/OrderListener.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/OrderListener.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/OrderManagementService.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/OrderManagementService.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/OrderRouter.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/OrderRouter.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/RiskValidator.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/RiskValidator.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/api/OrderController.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/api/OrderController.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/api/RestServer.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/api/RestServer.cpp"
+		},
+		"CMakeFiles/oms_modular_monolith.dir/src/main.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/main.cpp"
+		}
+	}
+}

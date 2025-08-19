@@ -1,0 +1,62 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "Clang",
+	"compiler-simulate-id" : "",
+	"config" : "Release",
+	"cxx-modules" : 
+	{
+		"CMakeFiles/oms_modules.dir/modules/oms/ExecutionCache.ixx.o" : 
+		{
+			"bmi-only" : false,
+			"destination" : null,
+			"name" : "cxx_modules",
+			"relative-directory" : "modules/oms",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/modules/oms/ExecutionCache.ixx",
+			"type" : "CXX_MODULES",
+			"visibility" : "PRIVATE"
+		},
+		"CMakeFiles/oms_modules.dir/modules/position/PositionService.ixx.o" : 
+		{
+			"bmi-only" : false,
+			"destination" : null,
+			"name" : "cxx_modules",
+			"relative-directory" : "modules/position",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/modules/position/PositionService.ixx",
+			"type" : "CXX_MODULES",
+			"visibility" : "PRIVATE"
+		},
+		"CMakeFiles/oms_modules.dir/modules/services/IRiskService.ixx.o" : 
+		{
+			"bmi-only" : false,
+			"destination" : null,
+			"name" : "cxx_modules",
+			"relative-directory" : "modules/services",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/modules/services/IRiskService.ixx",
+			"type" : "CXX_MODULES",
+			"visibility" : "PRIVATE"
+		},
+		"CMakeFiles/oms_modules.dir/modules/services/RiskService.ixx.o" : 
+		{
+			"bmi-only" : false,
+			"destination" : null,
+			"name" : "cxx_modules",
+			"relative-directory" : "modules/services",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/modules/services/RiskService.ixx",
+			"type" : "CXX_MODULES",
+			"visibility" : "PRIVATE"
+		}
+	},
+	"database-info" : null,
+	"dir-cur-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-cur-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"dir-top-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-top-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : [],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/oms_modules.dir",
+	"sources" : {}
+}

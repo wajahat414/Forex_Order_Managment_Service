@@ -1,0 +1,30 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "Clang",
+	"compiler-simulate-id" : "",
+	"config" : "Release",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-cur-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"dir-top-bld" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules",
+	"dir-top-src" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : [],
+	"language" : "CXX",
+	"linked-target-dirs" : 
+	[
+		"/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/oms_modules.dir"
+	],
+	"module-dir" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/ModulesSmokeTest.dir",
+	"sources" : 
+	{
+		"CMakeFiles/ModulesSmokeTest.dir/src/modules_smoke_test.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/src/modules_smoke_test.cpp"
+		}
+	}
+}

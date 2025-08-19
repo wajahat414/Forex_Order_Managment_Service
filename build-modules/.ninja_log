@@ -1,0 +1,11 @@
+# ninja log v7
+3	219	1755608268584393214	CMakeFiles/oms_modules.dir/modules/services/RiskService.ixx.o.ddi	d193c729dadff4a6
+3	225	1755608268583966793	CMakeFiles/oms_modules.dir/modules/services/IRiskService.ixx.o.ddi	7656ac34b4342fe7
+3	231	1755608268584620966	CMakeFiles/oms_modules.dir/modules/position/PositionService.ixx.o.ddi	6c305e8320e5cfe
+4	231	1755608268584769633	CMakeFiles/oms_modules.dir/modules/oms/ExecutionCache.ixx.o.ddi	2346713d095d23ec
+231	242	1755608268822911406	CMakeFiles/oms_modules.dir/CXX.dd	594926f90a03af81
+231	242	1755608268822911406	/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-modules/CMakeFiles/oms_modules.dir/CXXModules.json	594926f90a03af81
+231	242	1755608268822911406	CMakeFiles/oms_modules.dir/modules/services/IRiskService.ixx.o.modmap	594926f90a03af81
+231	242	1755608268822911406	CMakeFiles/oms_modules.dir/modules/services/RiskService.ixx.o.modmap	594926f90a03af81
+231	242	1755608268822911406	CMakeFiles/oms_modules.dir/modules/position/PositionService.ixx.o.modmap	594926f90a03af81
+231	242	1755608268822911406	CMakeFiles/oms_modules.dir/modules/oms/ExecutionCache.ixx.o.modmap	594926f90a03af81

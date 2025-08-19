@@ -1,0 +1,34 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "ninja-clang",
+      "displayName": "Ninja + Apple Clang",
+      "description": "Build with Ninja generator and Apple clang (modules disabled)",
+      "generator": "Ninja",
+      "binaryDir": "build",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+        "CMAKE_C_COMPILER": "/usr/bin/clang",
+        "CMAKE_BUILD_TYPE": "Release",
+        "ENABLE_MODULES": "OFF"
+      }
+    },
+    {
+      "name": "ninja-llvm",
+      "displayName": "Ninja + LLVM Clang (Modules)",
+      "description": "Build with Ninja generator and LLVM clang with C++20 modules enabled",
+      "generator": "Ninja",
+      "binaryDir": "build-modules",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_CXX_COMPILER": "/opt/homebrew/opt/llvm/bin/clang++",
+        "CMAKE_C_COMPILER": "/opt/homebrew/opt/llvm/bin/clang",
+        "CMAKE_BUILD_TYPE": "Release",
+        "ENABLE_MODULES": "ON",
+        "CMAKE_CXX_FLAGS": "-stdlib=libc++ -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
+      }
+    }
+  ]
+}

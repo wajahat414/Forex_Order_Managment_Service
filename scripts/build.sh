@@ -12,7 +12,7 @@ cd build
 
 # Configure with CMake
 echo "Configuring with CMake..."
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ ..
 
 # Build the project
 echo "Building project..."

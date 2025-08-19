@@ -1,0 +1,16 @@
+{
+  "revision": 0,
+  "rules": [
+    {
+      "primary-output": "CMakeFiles/oms_modules.dir/modules/services/IRiskService.ixx.o",
+      "provides": [
+        {
+          "is-interface": true,
+          "logical-name": "services.risk",
+          "source-path": "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/modules/services/IRiskService.ixx"
+        }
+      ]
+    }
+  ],
+  "version": 1
+}

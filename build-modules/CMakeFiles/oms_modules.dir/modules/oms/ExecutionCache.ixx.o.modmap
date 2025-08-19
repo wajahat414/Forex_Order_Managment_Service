@@ -1,0 +1,2 @@
+-x c++-module
+-fmodule-output=CMakeFiles/oms_modules.dir/oms.execution_cache.pcm
