@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.16)
-project(OrderManagementService VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.28)
+project(oms_modular_monolith LANGUAGES CXX)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Set paths for local FastDDS installation
 set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dds;${CMAKE_PREFIX_PATH}")
@@ -12,6 +13,7 @@ set(CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dds;${CMAKE_PREFIX_PATH}")
 find_package(fastcdr REQUIRED)
 find_package(fastdds REQUIRED)
 find_package(nlohmann_json REQUIRED)
+# find_package(Drogon REQUIRED)
 
 
 set(LOG4CXX_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/log4cxx/include")
@@ -90,6 +92,9 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     $<$<CONFIG:Release>:-O3>
     ${LOG4CXX_CFLAGS_OTHER}
 )
+
+
+
 
 # ✅ ENHANCED: TestClient with automatic source discovery
 set(TEST_CLIENT_SOURCES)
@@ -251,3 +256,4 @@ if(SIMPLE_TEST_SOURCES)
 
     message(STATUS "✅ SimpleTest executable configured with NewOrderSingle support")
 endif()
+

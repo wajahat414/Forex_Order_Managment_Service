@@ -74,7 +74,7 @@ public:
         {
             // Create participant with RAII cleanup
             DomainParticipantQos pqos;
-            pqos.setup_transports(eprosima::fastdds::rtps::BuiltinTransports::UDPv4);
+            pqos.setup_transports(eprosima::fastdds::rtps::BuiltinTransports::LARGE_DATA);
             pqos.name(CLIENT_PARTICIPANT_NAME);
 
             auto *raw_participant = DomainParticipantFactory::get_instance()

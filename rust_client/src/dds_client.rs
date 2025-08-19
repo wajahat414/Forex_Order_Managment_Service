@@ -2,89 +2,25 @@
 use crate::new_order_single::{generate_unique_cl_ord_id, NewOrderSingle};
 use crate::order_message::{generate_unique_order_id, OrderRequest, OrderSide, OrderType};
 use anyhow::{Context, Result};
-use log::{error, info, warn};
-use rustdds::no_key::{DataReader, DataSample, DataWriter};
-use rustdds::*;
+use log::info;
+use rustdds::no_key::DataWriter;
 use serde_json;
-use std::time::Duration;
-use tokio::time::{sleep, timeout};
-
-/// DDS topic name matching OMS configuration
-const NEW_ORDER_REQUEST_TOPIC_NAME: &str = "new_order_request";
-const NEW_ORDER_SINGLE_TOPIC_NAME: &str = "NEW_ORDER_SINGLE_TOPIC";
-const DEFAULT_DOMAIN_ID: u16 = 0;
 
 /// Rust DDS client for communicating with Order Management Service using RustDDS
 pub struct OrderDdsClient {
-    participant: DomainParticipant,
-    topic: Topic,
-    writer: DataWriter<OrderRequest>,
-    new_order_single_topic: Topic,
+    order_request_writer: DataWriter<OrderRequest>,
     new_order_single_writer: DataWriter<NewOrderSingle>,
 }
 
 impl OrderDdsClient {
     /// Initialize DDS client with FastDDS compatibility using RustDDS
-    pub async fn new() -> Result<Self> {
-        info!("🔧 Initializing Rust DDS client for OMS communication...");
-
-        // Create domain participant for financial trading domain
-        let participant = DomainParticipant::new(0).unwrap();
-
-        let qos = QosPolicyBuilder::new()
-            .reliability(policy::Reliability::Reliable {
-                max_blocking_time: rustdds::Duration::ZERO,
-            })
-            .build();
-
-        info!(
-            "✅ Created DDS domain participant on domain {}",
-            DEFAULT_DOMAIN_ID
-        );
-
-        let subscriber = participant.create_subscriber(&qos).unwrap();
-
-        let publisher = participant.create_publisher(&qos).unwrap();
-
-        let some_topic = participant
-            .create_topic(
-                NEW_ORDER_REQUEST_TOPIC_NAME.to_string(),
-                "OrderRequest".to_string(),
-                &qos,
-                TopicKind::NoKey,
-            )
-            .unwrap();
-
-        let writer = publisher
-            .create_datawriter_no_key::<OrderRequest, CDRSerializerAdapter<OrderRequest>>(
-                &some_topic,
-                None,
-            )
-            .unwrap();
-
-        info!("✅ Created data writer for order publishing");
-
-        let new_order_single_topic = participant
-            .create_topic(
-                NEW_ORDER_SINGLE_TOPIC_NAME.to_string(),
-                "DistributedATS_NewOrderSingle::NewOrderSingle".to_string(),
-                &qos,
-                TopicKind::NoKey, // NewOrderSingle uses NoKey based on C++ implementation
-            )
-            .context("Failed to create NewOrderSingle topic")?;
-
-        let new_order_single_writer = publisher
-            .create_datawriter_no_key::<NewOrderSingle, CDRSerializerAdapter<NewOrderSingle>>(
-                &new_order_single_topic,
-                Some(qos.clone()),
-            )
-            .context("Failed to create NewOrderSingle writer")?;
-
+    pub async fn new(
+        order_request_writer: DataWriter<OrderRequest>,
+        new_order_single_writer: DataWriter<NewOrderSingle>,
+    ) -> Result<Self> {
         Ok(Self {
-            participant,
-            topic: some_topic,
-            writer,
-            new_order_single_topic,
+            order_request_writer,
+
             new_order_single_writer,
         })
     }
@@ -105,22 +41,9 @@ impl OrderDdsClient {
         let order_clone = order.clone();
 
         // Publish order to OMS using RustDDS
-        self.writer
+        self.order_request_writer
             .write(order_clone, None)
             .context("Failed to write order to DDS topic")?;
-
-        info!(
-            "✅ Sent order: {} for {} ({:?} {} @ {})",
-            order.order_id,
-            order.symbol,
-            order.side,
-            order.quantity,
-            if order.price > 0.0 {
-                order.price.to_string()
-            } else {
-                "MARKET".to_string()
-            }
-        );
 
         Ok(())
     }

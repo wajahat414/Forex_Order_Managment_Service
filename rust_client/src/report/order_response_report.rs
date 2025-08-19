@@ -87,11 +87,6 @@ pub struct OrderResponseReport {
 }
 
 impl OrderResponseReport {
-    /// Get the exact type name for FastDDS compatibility
-    pub const fn type_name() -> &'static str {
-        "OMS::OrderResponseReport"
-    }
-
     /// ✅ FIXED: Helper methods using u8 values for FIX protocol compliance
     pub fn is_order_accepted(&self) -> bool {
         self.exec_type == b'0' && self.ord_status == b'0' // New order, pending new

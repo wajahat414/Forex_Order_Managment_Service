@@ -1,5 +1,4 @@
 #include "Adapter.hpp"
-
 #include <iostream>
 
 std::atomic<int32_t> Adapter::sequence_counter_{1000};

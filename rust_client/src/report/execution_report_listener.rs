@@ -15,9 +15,6 @@ const DEFAULT_DOMAIN_ID: u16 = 0;
 
 /// ExecutionReport listener following OMS architecture patterns for real-time order tracking
 pub struct ExecutionReportListener {
-    participant: DomainParticipant,
-    subscriber: Subscriber,
-    topic: Topic,
     reader: DataReader<ExecutionReport>,
     // Order tracking cache for financial audit trail following OMS requirements
     order_status_cache: Arc<Mutex<HashMap<String, ExecutionReport>>>,
@@ -26,61 +23,10 @@ pub struct ExecutionReportListener {
 
 impl ExecutionReportListener {
     /// Initialize execution report listener with FastDDS best practices
-    pub async fn new() -> Result<Self> {
+    pub async fn new(reader: DataReader<ExecutionReport>) -> Result<Self> {
         info!("🔧 Initializing ExecutionReport listener following OMS architecture patterns...");
 
-        // Create domain participant for financial trading domain with proper error handling
-        let participant = DomainParticipant::new(DEFAULT_DOMAIN_ID)
-            .context("Failed to create DDS domain participant for ExecutionReport listener")?;
-
-        info!(
-            "✅ Created DDS domain participant on domain {} for execution reports",
-            DEFAULT_DOMAIN_ID
-        );
-
-        // Configure QoS for reliable financial message delivery following FastDDS best practices
-        let qos = QosPolicyBuilder::new()
-            .reliability(policy::Reliability::Reliable {
-                max_blocking_time: rustdds::Duration::ZERO,
-            })
-            .build();
-
-        // Create subscriber for execution report reception following OMS patterns
-        let subscriber = participant
-            .create_subscriber(&qos)
-            .context("Failed to create DDS subscriber for execution reports")?;
-
-        // Create topic for execution reports matching C++ OMS configuration
-        let topic = participant
-            .create_topic(
-                EXECUTION_REPORT_TOPIC_NAME.to_string(),
-                ExecutionReport::type_name().to_string(), // Uses exact C++ type name
-                &qos,
-                TopicKind::NoKey, // Matches C++ implementation
-            )
-            .context("Failed to create ExecutionReport topic following OMS architecture")?;
-
-        // Create data reader for execution report reception with proper FastDDS configuration
-        let reader = subscriber
-            .create_datareader_no_key::<ExecutionReport, CDRDeserializerAdapter<ExecutionReport>>(
-                &topic, None,
-            )
-            .context("Failed to create ExecutionReport reader with FastDDS compatibility")?;
-
-        info!("✅ Created ExecutionReport listener components following OMS guidelines");
-        info!(
-            "📡 Listening on topic: '{}' with type: '{}'",
-            EXECUTION_REPORT_TOPIC_NAME,
-            ExecutionReport::type_name()
-        );
-
-        // Allow time for participant discovery following FastDDS best practices
-        sleep(Duration::from_millis(500)).await;
-
         Ok(Self {
-            participant,
-            subscriber,
-            topic,
             reader,
             order_status_cache: Arc::new(Mutex::new(HashMap::new())),
             execution_callbacks: Arc::new(Mutex::new(Vec::new())),

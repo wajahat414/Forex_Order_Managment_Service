@@ -1,217 +1,151 @@
-use crate::report::{self, OrderResponseReport};
+use crate::report::OrderResponseReport;
 use anyhow::{Context, Result};
-use log::{error, info, warn};
+use log::{error, info};
 use metrics::{counter, histogram};
 use rustdds::no_key::{DataReader, DataSample};
 use rustdds::*;
-use serde_json::value;
+
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
+use tokio::sync::{Mutex, RwLock};
 use tokio::time::sleep;
 
 /// DDS topic name for execution reports matching C++ OMS configuration
-const EXECUTION_REPORT_TOPIC_NAME: &str = "order_resonse";
-const DEFAULT_DOMAIN_ID: u16 = 0;
 
 /// ExecutionReport listener following OMS architecture patterns for real-time order tracking
 pub struct OrderResponseListener {
-    participant: DomainParticipant,
-    subscriber: Subscriber,
-    topic: Topic,
-    reader: DataReader<OrderResponseReport>,
+    reader: Mutex<DataReader<OrderResponseReport>>,
     // Order tracking cache for financial audit trail following OMS requirements
-    order_status_cache: Arc<Mutex<HashMap<String, OrderResponseReport>>>,
-    execution_callbacks: Arc<Mutex<Vec<Box<dyn Fn(&OrderResponseReport) + Send + Sync>>>>,
+    order_status_cache: RwLock<HashMap<String, OrderResponseReport>>,
+    execution_callbacks: RwLock<Vec<Box<dyn Fn(&OrderResponseReport) + Send + Sync>>>,
 }
 
 impl OrderResponseListener {
     /// Initialize execution report listener with FastDDS best practices
-    pub async fn new() -> Result<Self> {
-        info!("🔧 Initializing ExecutionReport listener following OMS architecture patterns...");
-
-        // Create domain participant for financial trading domain with proper error handling
-        let participant = DomainParticipant::new(DEFAULT_DOMAIN_ID)
-            .context("Failed to create DDS domain participant for ExecutionReport listener")?;
-
-        info!(
-            "✅ Created DDS domain participant on domain {} for execution reports",
-            DEFAULT_DOMAIN_ID
-        );
-
-        // Configure QoS for reliable financial message delivery following FastDDS best practices
-        let qos = QosPolicyBuilder::new()
-            .reliability(policy::Reliability::Reliable {
-                max_blocking_time: rustdds::Duration::ZERO,
-            })
-            .build();
-
-        // Create subscriber for execution report reception following OMS patterns
-        let subscriber = participant
-            .create_subscriber(&qos)
-            .context("Failed to create DDS subscriber for execution reports")?;
-
-        // Create topic for execution reports matching C++ OMS configuration
-        let topic = participant
-            .create_topic(
-                EXECUTION_REPORT_TOPIC_NAME.to_string(),
-                OrderResponseReport::type_name().to_string(), // Uses exact C++ type name
-                &qos,
-                TopicKind::NoKey, // Matches C++ implementation
-            )
-            .context("Failed to create ExecutionReport topic following OMS architecture")?;
-
-        // Create data reader for execution report reception with proper FastDDS configuration
-        let reader = subscriber
-            .create_datareader_no_key::<OrderResponseReport, CDRDeserializerAdapter<OrderResponseReport>>(
-                &topic,
-                None,
-            )
-            .context("Failed to create ExecutionReport reader with FastDDS compatibility")?;
-
-        info!("✅ Created ExecutionReport listener components following OMS guidelines");
-        info!(
-            "📡 Listening on topic: '{}' with type: '{}'",
-            EXECUTION_REPORT_TOPIC_NAME,
-            OrderResponseReport::type_name()
-        );
-
-        // Allow time for participant discovery following FastDDS best practices
-        sleep(Duration::from_millis(500)).await;
-
+    pub async fn new(reader: DataReader<OrderResponseReport>) -> Result<Self> {
         Ok(Self {
-            participant,
-            subscriber,
-            topic,
-            reader,
-            order_status_cache: Arc::new(Mutex::new(HashMap::new())),
-            execution_callbacks: Arc::new(Mutex::new(Vec::new())),
+            reader: Mutex::new(reader),
+            order_status_cache: RwLock::new(HashMap::new()),
+            execution_callbacks: RwLock::new(Vec::new()),
         })
     }
 
     /// Read all available execution reports from the topic following OMS real-time processing patterns
 
-    pub async fn read_execution_reports(&mut self) -> Result<Vec<OrderResponseReport>> {
-        let mut reports = Vec::new();
+    pub async fn poll_once(&self) -> Result<usize> {
+        let mut processed = 0usize;
+        let mut reader = self.reader.lock().await;
 
-        // Keep reading until no more samples are available
-        let mut start: Instant = Instant::now();
-
-        let mut recieved_count = 0;
-        let mut count = 0;
         loop {
-            match self.reader.take_next_sample() {
-                Ok(Some(value)) => {
-                    counter!("process.recieved_count").increment(recieved_count);
-                    count += 1;
-                    if count == 1 {
-                        start = Instant::now();
-                    }
-
-                    if (count >= 1000) {
-                        let delta = start.elapsed();
-                        histogram!("process.total_recieved_time").record(delta);
-                        info!(
-                            "total time taken for recieving Seconds {}, miliseconds {}",
-                            delta.as_secs(),
-                            delta.subsec_millis()
-                        );
-                    }
-
-                    let value = value.value().clone();
-                    info!(
-                        "📨 Received OrderResponseReport: OrderID={}, Status={}",
-                        value.order_id, value.ord_status,
-                    );
-
-                    // OMS business logic
+            match reader.take_next_sample() {
+                Ok(Some(sample)) => {
+                    let value = sample.value().clone();
+                    // ...existing log...
                     self.log_execution_report(&value);
-                    self.update_order_cache(&value);
+                    self.update_order_cache(&value).await;
                     self.trigger_callbacks(&value).await;
-
-                    reports.push(value);
+                    processed += 1;
                 }
-                Ok(None) => {
-                    // No more samples in queue — exit loop
-                    break;
-                }
+                Ok(None) => break,
                 Err(e) => {
-                    error!("❌ Error reading ExecutionReport: {}", e);
+                    error!("❌ Error reading OrderResponse: {}", e);
                     break;
                 }
             }
         }
+        Ok(processed)
+    }
 
-        Ok(reports)
+    pub async fn run(&self) {
+        loop {
+            let _ = self.poll_once().await;
+            sleep(Duration::from_millis(1)).await; // yield
+        }
     }
 
     /// Start continuous listening for execution reports following OMS real-time architecture
-    pub async fn start_listening(&mut self) -> Result<()> {
-        info!("🎧 Starting continuous ExecutionReport listening from OMS/Matching Engine...");
+    // pub async fn start_listening(&mut self) -> Result<()> {
+    //     info!("🎧 Starting continuous ExecutionReport listening from OMS/Matching Engine...");
 
-        loop {
-            match self.read_execution_reports().await {
-                Ok(reports) => {
-                    if !reports.is_empty() {
-                        info!(
-                            "📊 Processed {} ExecutionReports in this cycle",
-                            reports.len()
-                        );
-                    }
-                }
-                Err(e) => {
-                    error!("❌ Error during ExecutionReport listening: {}", e);
-                    // Continue listening despite errors for robust financial system operation
-                }
-            }
+    //     let mut start: Instant = Instant::now();
 
-            // Brief pause to prevent CPU spinning while maintaining low latency for trading systems
-            sleep(Duration::from_millis(10)).await;
-        }
-    }
+    //     let mut recieved_count = 0;
+    //     let mut count = 0;
 
-    pub fn get_order_status(&self, order_id: &str) -> Option<OrderResponseReport> {
-        let cache = self.order_status_cache.lock().unwrap();
+    //     loop {
+    //         match self.read_execution_reports().await {
+    //             Ok(reports) => {
+    //                 if !reports.is_empty() {
+    //                     info!(
+    //                         "📊 Processed {} ExecutionReports in this cycle",
+    //                         reports.len()
+    //                     );
+
+    //                     counter!("process.recieved_count").increment(recieved_count);
+
+    //                     count += 1;
+    //                     recieved_count += 1;
+    //                     info!("received counter {}", count);
+    //                     if count == 1 {
+    //                         start = Instant::now();
+    //                     }
+
+    //                     if (count >= 1000) {
+    //                         let delta = start.elapsed();
+    //                         histogram!("process.total_recieved_time").record(delta);
+    //                         println!(
+    //                             "total time taken for recieving Seconds {}, miliseconds {}",
+    //                             delta.as_secs(),
+    //                             delta.subsec_millis()
+    //                         );
+    //                         info!(
+    //                             "total time taken for recieving records# {}, Seconds {}, miliseconds {}",recieved_count,
+    //                             delta.as_secs(),
+    //                             delta.subsec_millis()
+    //                         );
+    //                     }
+    //                 }
+    //             }
+    //             Err(e) => {
+    //                 error!("❌ Error during ExecutionReport listening: {}", e);
+    //                 // Continue listening despite errors for robust financial system operation
+    //             }
+    //         }
+
+    //         // Brief pause to prevent CPU spinning while maintaining low latency for trading systems
+    //         sleep(Duration::from_millis(1)).await;
+    //     }
+    // }
+
+    pub async fn get_order_status(&self, order_id: &str) -> Option<OrderResponseReport> {
+        let cache = self.order_status_cache.read().await;
         cache.get(order_id).cloned()
     }
 
     /// Get all tracked orders and their current status for OMS monitoring
-    pub fn get_all_order_statuses(&self) -> HashMap<String, OrderResponseReport> {
-        let cache = self.order_status_cache.lock().unwrap();
+    pub async fn get_all_order_statuses(&self) -> HashMap<String, OrderResponseReport> {
+        let cache = self.order_status_cache.read().await;
         cache.clone()
     }
 
     /// Register callback for real-time execution report processing following OMS architecture
-    pub fn register_execution_callback<F>(&self, callback: F)
+    pub async fn register_execution_callback<F>(&self, callback: F)
     where
         F: Fn(&OrderResponseReport) + Send + Sync + 'static,
     {
-        let mut callbacks = self.execution_callbacks.lock().unwrap();
+        let mut callbacks = self.execution_callbacks.write().await;
         callbacks.push(Box::new(callback));
         info!("✅ Registered new ExecutionReport callback following OMS patterns");
     }
 
-    /// Check connection status to OMS/Matching Engine following monitoring best practices
-    pub fn get_connection_status(&self) -> OrderResponseReportConnectionStatus {
-        let matched_publications = 0;
-        OrderResponseReportConnectionStatus {
-            domain_id: DEFAULT_DOMAIN_ID,
-            topic_name: EXECUTION_REPORT_TOPIC_NAME.to_string(),
-            type_name: OrderResponseReport::type_name().to_string(),
-            publisher_count: matched_publications,
-            is_connected: matched_publications > 0,
-            tracked_orders: {
-                let cache = self.order_status_cache.lock().unwrap();
-                cache.len()
-            },
-        }
-    }
+
 
     /// Internal method to log execution report for regulatory compliance following OMS requirements
     fn log_execution_report(&self, report: &OrderResponseReport) {
         info!(
-            "📋 EXECUTION_REPORT_AUDIT: Topic='{}', ExecID={}, OrderID={}, OrigClOrdID={}, Symbol={}, Side={}, Qty={}, Price={}, ExecType={}, OrdStatus={}, CumQty={}, AvgPx={}, Text='{}'",
-            EXECUTION_REPORT_TOPIC_NAME,
+            "📋 EXECUTION_REPORT_AUDIT: , ExecID={}, OrderID={}, OrigClOrdID={}, Symbol={}, Side={}, Qty={}, Price={}, ExecType={}, OrdStatus={}, CumQty={}, AvgPx={}, Text='{}'",
+      
             report.exec_id,
             report.order_id,
             report.orig_cl_ord_id,
@@ -228,9 +162,10 @@ impl OrderResponseListener {
     }
 
     /// Internal method to update order status cache following OMS tracking requirements
-    fn update_order_cache(&self, report: &OrderResponseReport) {
-        let mut cache = self.order_status_cache.lock().unwrap();
+    async fn update_order_cache(&self, report: &OrderResponseReport) {
+        let mut cache = self.order_status_cache.write().await;
         cache.insert(report.order_id.clone(), report.clone());
+        info!("update cache called");
 
         // Also cache by OrigClOrdID for comprehensive order tracking following OMS patterns
         if !report.orig_cl_ord_id.is_empty() {
@@ -239,7 +174,7 @@ impl OrderResponseListener {
     }
 
     async fn trigger_callbacks(&self, report: &OrderResponseReport) {
-        let callbacks = self.execution_callbacks.lock().unwrap();
+        let callbacks = self.execution_callbacks.read().await;
         for callback in callbacks.iter() {
             callback(report);
         }

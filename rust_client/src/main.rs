@@ -1,12 +1,15 @@
 use anyhow::Result;
 use log::info;
 use metrics::{counter, histogram};
+use oms_rust_client::common::DdsInitializer;
 use oms_rust_client::report::ExecutionReport;
 use oms_rust_client::report::ExecutionReportListener;
 use oms_rust_client::report::OrderResponseListener;
 use oms_rust_client::{OrderDdsClient, OrderResponseReport, OrderSide};
+use std::collections::HashSet;
 use std::fs::OpenOptions;
 use std::io::{self, Write};
+use std::sync::Arc;
 use std::time::Duration;
 use tokio::time::sleep;
 use tokio::time::Instant;
@@ -41,36 +44,47 @@ async fn main() -> Result<()> {
     println!("Following OMS architecture patterns for financial trading");
 
     // Initialize order client following OMS architecture
-    let mut order_client = OrderDdsClient::new().await?;
+    let dds_initialzer = DdsInitializer::initialze().await?;
+    let order_client = OrderDdsClient::new(
+        dds_initialzer.order_request_data_writer,
+        dds_initialzer.new_order_single_data_writer,
+    )
+    .await?;
 
     // Initialize execution report listener following OMS real-time processing patterns
-    let mut order_response_listener = OrderResponseListener::new().await?;
-    let mut execution_report_listener = ExecutionReportListener::new().await?;
+    let order_response_listener: Arc<OrderResponseListener> =
+        Arc::new(OrderResponseListener::new(dds_initialzer.order_response_datareader).await?);
+    let execution_report_listener =
+        ExecutionReportListener::new(dds_initialzer.execution_report_data_reader).await?;
 
     // Register callback for real-time execution processing following OMS requirements
-    order_response_listener.register_execution_callback(
-        |report: &OrderResponseReport| match report.get_execution_status() {
-            "Filled" => info!(
-                "🎉 Order FILLED: {} - {} shares @ {} (Exchange: {})",
-                report.order_id, report.cum_qty, report.avg_px, report.security_exchange
-            ),
-            "Rejected" => info!(
-                "❌ Order REJECTED: {} - Reason: {} (RejReason: {})",
-                report.order_id, report.text, report.ord_rej_reason
-            ),
-            "Partially Filled" => info!(
-                "📊 Order PARTIALLY FILLED: {} - {} of {} shares @ avg {}",
-                report.order_id, report.cum_qty, report.order_qty, report.avg_px
-            ),
-            "Pending New" => info!("⏳ Order ACCEPTED: {} - Pending execution", report.order_id),
-            _ => info!(
-                "📈 Order Status Update: {} - {} (ExecType: {})",
-                report.order_id,
-                report.get_execution_status(),
-                report.get_execution_type()
-            ),
-        },
-    );
+    order_response_listener
+        .register_execution_callback(|report: &OrderResponseReport| {
+            match report.get_execution_status() {
+                "Filled" => info!(
+                    "🎉 Order FILLED: {} - {} shares @ {} (Exchange: {})",
+                    report.order_id, report.cum_qty, report.avg_px, report.security_exchange
+                ),
+                "Rejected" => info!(
+                    "❌ Order REJECTED: {} - Reason: {} (RejReason: {})",
+                    report.order_id, report.text, report.ord_rej_reason
+                ),
+                "Partially Filled" => info!(
+                    "📊 Order PARTIALLY FILLED: {} - {} of {} shares @ avg {}",
+                    report.order_id, report.cum_qty, report.order_qty, report.avg_px
+                ),
+                "Pending New" => {
+                    info!("⏳ Order ACCEPTED: {} - Pending execution", report.order_id)
+                }
+                _ => info!(
+                    "📈 Order Status Update: {} - {} (ExecType: {})",
+                    report.order_id,
+                    report.get_execution_status(),
+                    report.get_execution_type()
+                ),
+            }
+        })
+        .await;
 
     execution_report_listener.register_execution_callback(|report: &ExecutionReport| match report
         .get_execution_status()
@@ -99,27 +113,12 @@ async fn main() -> Result<()> {
     // Wait for discovery following OMS connection patterns
     println!("⏳ Discovering OMS components...");
 
-    // Start execution report listening in background following OMS real-time architecture
-    let mut listener_for_background = OrderResponseListener::new().await?;
-    let mut execution_report_listener_for_background = ExecutionReportListener::new().await?;
-    tokio::spawn(async move {
-        if let Err(e) = listener_for_background.start_listening().await {
-            log::error!(
-                "ExecutionReport listener error following OMS patterns: {}",
-                e
-            );
-        }
-        // if let Err(e) = execution_report_listener_for_background
-        //     .start_listening()
-        //     .await
-        // {
-        //     log::error!(
-        //         "ExecutionReport listener error following OMS patterns: {}",
-        //         e
-        //     );
-        // }
-    });
-
+    {
+        let l = Arc::clone(&order_response_listener);
+        tokio::spawn(async move {
+            l.run().await;
+        });
+    }
     println!("\n🚀 Enhanced Financial Trading Client Ready!");
     println!("Commands following OMS architecture:");
     println!("  1 - Send OrderRequest to OMS (BTC market buy)");
@@ -130,6 +129,7 @@ async fn main() -> Result<()> {
     println!("  6 - Interactive order creation");
     println!("  s - Show connection status");
     println!("  0 - Exit");
+    let mut sent_order_ids: HashSet<String> = HashSet::new();
 
     loop {
         print!("\nEnter command (0-6,s): ");
@@ -141,10 +141,11 @@ async fn main() -> Result<()> {
         match input.trim() {
             "1" => {
                 // Send OrderRequest to OMS following architecture patterns
+                let mut count = 0;
+                let mut messages_count = 0;
+                let start = Instant::now();
+
                 loop {
-                    let mut count = 0;
-                    let start = Instant::now();
-                    let messages_count = 0;
                     match order_client
                         .send_market_order("BTC-USD", OrderSide::BUY, 1000.0)
                         .await
@@ -152,15 +153,18 @@ async fn main() -> Result<()> {
                         Ok(order_id) => {
                             println!("✅ Sent OrderRequest to OMS: {}", order_id);
                             println!("   Monitor execution reports for status updates");
+                            messages_count += 1;
+                            sent_order_ids.insert(order_id);
                         }
                         Err(e) => eprintln!("❌ Failed to send OrderRequest: {}", e),
                     }
                     counter!("process.order_sent_count").increment(messages_count);
-                    if count >= 1000 {
+                    count += 1;
+                    if count == 1000 {
                         let delta = start.elapsed();
-                        info!(
+                        println!(
                             "time taken for sending#{} Seconds{} milli{}",
-                            count,
+                            messages_count,
                             delta.as_secs(),
                             delta.subsec_millis()
                         );
@@ -169,7 +173,7 @@ async fn main() -> Result<()> {
                         break;
                     }
 
-                    count += 1;
+                    sleep(Duration::from_millis(1)).await;
                 }
             }
 
@@ -188,9 +192,9 @@ async fn main() -> Result<()> {
                         );
 
                         // Monitor for execution reports following OMS tracking patterns
-                        for i in 1..=10 {
+                        for _ in 1..=10 {
                             if let Some(status) =
-                                order_response_listener.get_order_status(&cl_ord_id)
+                                order_response_listener.get_order_status(&cl_ord_id).await
                             {
                                 println!(
                                     "📊 Order {} status: {} (CumQty: {}/{})",
@@ -217,7 +221,8 @@ async fn main() -> Result<()> {
             "5" => {
                 // View execution report cache following OMS monitoring patterns
                 println!("📊 Execution Report Cache:");
-                let statuses = order_response_listener.get_all_order_statuses();
+                let mut missing_orders: Vec<String> = Vec::new();
+                let statuses = order_response_listener.get_all_order_statuses().await;
 
                 if statuses.is_empty() {
                     println!("   No execution reports cached yet");
@@ -232,6 +237,30 @@ async fn main() -> Result<()> {
                             report.symbol
                         );
                     }
+
+                    println!(
+                        "Sent Orders {}, Recieved reports {},",
+                        sent_order_ids.len(),
+                        statuses.len()
+                    );
+
+                    for order_id in &sent_order_ids {
+                        if !statuses.contains_key(order_id) {
+                            missing_orders.push(order_id.clone());
+                        }
+                    }
+
+                    if !missing_orders.is_empty() {
+                        println!("❌ orders with no execution report recieved");
+                        for order_id in missing_orders {
+                            println!(".    - {}", order_id);
+                        }
+                    } else {
+                        println!(
+                            "✅ All orders recieved execution report count{}",
+                            statuses.len()
+                        );
+                    }
                 }
             }
             "6" => {
@@ -243,7 +272,19 @@ async fn main() -> Result<()> {
                 // Show comprehensive connection status following OMS monitoring patterns
                 println!("📊 Enhanced Connection Status:");
 
-                println!("   {}", order_response_listener.get_connection_status());
+                // order_response_listener
+                //     .lock()
+                //     .await
+                //     .unwrap()
+                //     .get_connection_status();
+                // println!(
+                //     "   {}",
+                //     order_response_listener
+                //         .lock()
+                //         .await
+                //         .unwrap()
+                //         .get_connection_status()
+                // );
             }
             "0" => {
                 println!("👋 Shutting down enhanced client following OMS patterns...");

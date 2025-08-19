@@ -82,7 +82,7 @@ void OrderListener::on_data_available(DataReader *reader)
     OrderRequest order;
     SampleInfo info;
 
-       while (reader->read_next_sample(&order, &info) == RETCODE_OK)
+    while (reader->read_next_sample(&order, &info) == RETCODE_OK)
     {
 
         if (info.valid_data)
@@ -91,7 +91,7 @@ void OrderListener::on_data_available(DataReader *reader)
                       << " for symbol: " << order.symbol() << std::endl;
             process_order(order);
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::microseconds(1));
     }
 }
 

@@ -116,7 +116,7 @@ namespace distributed_ats_utils
                 throw std::runtime_error("Failed to create a participant : " + _participant_name);
             }
         }
-
+ 
         // Deletes domain participant
         virtual ~basic_domain_participant()
         {

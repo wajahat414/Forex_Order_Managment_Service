@@ -25,14 +25,18 @@ auto const exec_report_processor = [](OrderManagmentService::Application &applic
     bool response = application.onExecutionReportRecieved(execution_report);
     if (response)
     {
-        LOG4CXX_INFO(logger, "OrderResponse Report Published Successfully");
+        LOG4CXX_INFO(logger, "OrderResponse Report Published Successfully" << execution_report.OrderID());
+    }
+    else
+    {
+        LOG4CXX_ERROR(logger, "OrderResponse Failed to publish report for order" << execution_report.OrderID());
     }
 };
 
 namespace OrderManagmentService
 {
     ExecutionReportDataReaderListenerImpl::ExecutionReportDataReaderListenerImpl(OrderManagmentService::Application &application)
-        : _processor(application, exec_report_processor, "ExecutionReportDataReaderListenerImpl", 100)
+        : _processor(application, exec_report_processor, "ExecutionReportDataReaderListenerImpl", 1)
     {
     }
 
