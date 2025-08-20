@@ -1,9 +1,9 @@
-pub mod dds_client;
-pub mod report;
-
 pub mod common;
+pub mod dds_client;
+pub mod fix_client;
 pub mod new_order_single;
 pub mod order_message;
+pub mod report;
 
 // Re-export key types for easier usage following OMS architecture patterns
 pub use dds_client::{ConnectionStatus, OrderDdsClient};
