@@ -74,6 +74,32 @@
                 }
             ],
             "preLaunchTask": "Build OMS"
+        },
+                {
+            "name": "Debug OMS Main",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/oms_modular_monolith",
+            "args": ["config/users.json", "config/symbols.json"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build OMS with Modules"
+        },
+        {
+            "name": "Debug Module Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/ModuleTest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build Module Test"
         }
     ]
 }

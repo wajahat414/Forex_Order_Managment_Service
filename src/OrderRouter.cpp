@@ -1,17 +1,12 @@
 #include "OrderRouter.hpp"
-#include <iostream>
 #include <BasicDomainParticipant.h>
+#include <iostream>
 OrderRouter::OrderRouter(OrderManagmentService::Application &application)
-    : application(application)
-{
-}
+    : application(application) {}
 
-OrderRouter::~OrderRouter()
-{
-}
+OrderRouter::~OrderRouter() {}
 
-bool OrderRouter::route_to_matching_engine(const OrderRequest &order)
-{
+bool OrderRouter::route_to_matching_engine(const OrderRequest &order) {
 
-    return application.onOrderRequestMessage(order);
+  return application.onOrderRequestMessage(order);
 }

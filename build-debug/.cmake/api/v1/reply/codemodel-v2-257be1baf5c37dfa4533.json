@@ -1,0 +1,133 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-a24bed01492e6d9c78e7.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "OMS",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "HeaderTest::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-HeaderTest-Debug-ea08d72d211a05869a1d.json",
+					"name" : "HeaderTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "OMS::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OMS-Debug-3e89cd675f2f087f394c.json",
+					"name" : "OMS",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "clean_all::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-clean_all-Debug-2d606f95e15c1987bace.json",
+					"name" : "clean_all",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "format::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-format-Debug-5f693463b49870a75585.json",
+					"name" : "format",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "quick_build::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-quick_build-Debug-0a17ae6719695e960488.json",
+					"name" : "quick_build",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "regenerate_idl::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-regenerate_idl-Debug-a6f2c37f401dcf083e10.json",
+					"name" : "regenerate_idl",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_tests::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_tests-Debug-71622f97b8ad2827e72b.json",
+					"name" : "run_tests",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "show_config::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-show_config-Debug-eb5dae5ff5474c5630bd.json",
+					"name" : "show_config",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "show_sources::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-show_sources-Debug-fa3cf06fa88afad8955d.json",
+					"name" : "show_sources",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug",
+		"source" : "/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 8
+	}
+}

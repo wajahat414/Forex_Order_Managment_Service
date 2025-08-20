@@ -1,74 +1,69 @@
 #pragma once
 
-#include <thread>
-#include "ConcurrentQueue.h"
 #include "Application.hpp"
+#include "ConcurrentQueue.h"
+#include <thread>
 
 #pragma once
 
-#include <thread>
-#include "ConcurrentQueue.h"
 #include "Application.hpp"
+#include "ConcurrentQueue.h"
+#include <thread>
 
-namespace OrderManagmentService
-{
+namespace OrderManagmentService {
 
-    template <class TT>
-    class message_composer_thread
-    {
-    public:
-        message_composer_thread(OrderManagmentService::Application &application, std::function<void(OrderManagmentService::Application &, TT &)> &&processor, const std::string &name,
-                                unsigned long wait_timeout_us = 1000) : _processor(processor), _name(name), _wait_timeout_us(wait_timeout_us)
-        {
+template <class TT> class message_composer_thread {
+public:
+  message_composer_thread(
+      OrderManagmentService::Application &application,
+      std::function<void(OrderManagmentService::Application &, TT &)>
+          &&processor,
+      const std::string &name, unsigned long wait_timeout_us = 1000)
+      : _processor(processor), _name(name), _wait_timeout_us(wait_timeout_us) {
 
-            LOG4CXX_INFO(logger, "Starting processor : [" << _name << "]");
+    LOG4CXX_INFO(logger, "Starting processor : [" << _name << "]");
 
-            _done.store(false);
-            _fix_publisher_thread = std::thread([&]()
-                                                {
-                                                    while (!_done.load())
-                                                    {
-                                                        TT dds_message;
-                                                        while (_dds_msg_queue.try_pop(dds_message))
-                                                        {
-                                                            LOG4CXX_INFO(logger, "Processing: [" << _name << "]");
-                                                            _processor(application, dds_message);
-                                                            LOG4CXX_INFO(logger, "Processed: [" << _name << "]");
-                                                        }
-
-                                                        std::this_thread::sleep_for(std::chrono::microseconds(_wait_timeout_us));
-                                                    }
-
-                                                    LOG4CXX_INFO(logger, "Exiting processes: [" << _name << "]"); });
-        };
-
-        void enqueue_dds_message(const TT &dds_msg)
-        {
-            _dds_msg_queue.push(dds_msg);
+    _done.store(false);
+    _fix_publisher_thread = std::thread([&]() {
+      while (!_done.load()) {
+        TT dds_message;
+        while (_dds_msg_queue.try_pop(dds_message)) {
+          LOG4CXX_INFO(logger, "Processing: [" << _name << "]");
+          _processor(application, dds_message);
+          LOG4CXX_INFO(logger, "Processed: [" << _name << "]");
         }
 
-        virtual ~message_composer_thread()
-        {
-            LOG4CXX_INFO(logger, "Stopping processor : [" << _name << "]");
+        std::this_thread::sleep_for(
+            std::chrono::microseconds(_wait_timeout_us));
+      }
 
-            _done.store(true);
+      LOG4CXX_INFO(logger, "Exiting processes: [" << _name << "]");
+    });
+  };
 
-            _fix_publisher_thread.join();
+  void enqueue_dds_message(const TT &dds_msg) { _dds_msg_queue.push(dds_msg); }
 
-            LOG4CXX_INFO(logger, "Stopped processor");
-        };
+  virtual ~message_composer_thread() {
+    LOG4CXX_INFO(logger, "Stopping processor : [" << _name << "]");
 
-    private:
-        concurrent_queue<TT> _dds_msg_queue;
+    _done.store(true);
 
-        std::thread _fix_publisher_thread;
-        std::atomic<bool> _done{false};
+    _fix_publisher_thread.join();
 
-        unsigned long _wait_timeout_us;
+    LOG4CXX_INFO(logger, "Stopped processor");
+  };
 
-        std::string _name;
+private:
+  concurrent_queue<TT> _dds_msg_queue;
 
-        std::function<void(OrderManagmentService::Application &, TT &)> _processor;
-    };
+  std::thread _fix_publisher_thread;
+  std::atomic<bool> _done{false};
 
-}
+  unsigned long _wait_timeout_us;
+
+  std::string _name;
+
+  std::function<void(OrderManagmentService::Application &, TT &)> _processor;
+};
+
+} // namespace OrderManagmentService

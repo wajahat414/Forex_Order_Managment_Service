@@ -1,0 +1,15 @@
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/HeaderTest.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/run_tests.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/regenerate_idl.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/show_sources.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/show_config.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/clean_all.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/quick_build.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/format.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/OMS.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/edit_cache.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/rebuild_cache.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/list_install_components.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/install.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/install/local.dir
+/Users/wajahat/Documents/WorkSpace/ForexSystem/OMS/build-debug/CMakeFiles/install/strip.dir

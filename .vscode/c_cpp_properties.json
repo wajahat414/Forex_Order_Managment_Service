@@ -1,31 +1,41 @@
 {
     "configurations": [
         {
-            "name": "Mac",
+            "name": "Mac-OMS-Headers",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/idl/idl",
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/common",
-                "${workspaceFolder}/modules"
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/idl/idl",
+                "${workspaceFolder}/dds/include",
+                "${workspaceFolder}/log4cxx/include",
+                "/opt/homebrew/include",
+                "/usr/local/include"
             ],
             "defines": [
                 "FASTCDR_DYN_LINK",
-                "FASTDDS_DYN_LINK"
+                "FASTDDS_DYN_LINK",
+                "OMS_TRADITIONAL_HEADERS=1"
             ],
             "compilerPath": "/usr/bin/clang++",
             "cStandard": "c17",
             "cppStandard": "c++20",
             "intelliSenseMode": "macos-clang-arm64",
+            "compileCommands": "${workspaceFolder}/build_headers/compile_commands.json",
             "compilerArgs": [
                 "-std=c++20",
-                "-fmodules-ts"
+                "-stdlib=libc++",
+                "--sysroot=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
             ],
             "browse": {
                 "path": [
                     "${workspaceFolder}",
-                    "${workspaceFolder}/modules"
-                ]
+                    "${workspaceFolder}/include/**",
+                    "${workspaceFolder}/common/**",
+                    "/opt/homebrew/include"
+                ],
+                "limitSymbolsToIncludedHeaders": false
             }
         }
     ],

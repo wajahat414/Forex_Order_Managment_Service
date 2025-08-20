@@ -1,15 +1,56 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Build OMS",
-			"type": "shell",
-			"command": "./build.sh",
-			"group": "build",
-			"problemMatcher": [
-				"$gcc"
-			],
-			"isBackground": false
-		}
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build OMS with Modules",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/build_llvm_modules.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "Build Module Test",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", 
+                "build", 
+                "--target", 
+                "ModuleTest"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "CMake Configure",
+            "type": "shell", 
+            "command": "cmake",
+            "args": [
+                "--preset",
+                "ninja-llvm"
+            ],
+            "group": "build"
+        }
+    ]
 }

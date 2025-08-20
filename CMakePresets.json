@@ -1,34 +1,39 @@
 {
-  "version": 3,
-  "configurePresets": [
-    {
-      "name": "ninja-clang",
-      "displayName": "Ninja + Apple Clang",
-      "description": "Build with Ninja generator and Apple clang (modules disabled)",
-      "generator": "Ninja",
-      "binaryDir": "build",
-      "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "20",
-        "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
-        "CMAKE_C_COMPILER": "/usr/bin/clang",
-        "CMAKE_BUILD_TYPE": "Release",
-        "ENABLE_MODULES": "OFF"
-      }
-    },
-    {
-      "name": "ninja-llvm",
-      "displayName": "Ninja + LLVM Clang (Modules)",
-      "description": "Build with Ninja generator and LLVM clang with C++20 modules enabled",
-      "generator": "Ninja",
-      "binaryDir": "build-modules",
-      "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "20",
-        "CMAKE_CXX_COMPILER": "/opt/homebrew/opt/llvm/bin/clang++",
-        "CMAKE_C_COMPILER": "/opt/homebrew/opt/llvm/bin/clang",
-        "CMAKE_BUILD_TYPE": "Release",
-        "ENABLE_MODULES": "ON",
-        "CMAKE_CXX_FLAGS": "-stdlib=libc++ -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include"
-      }
-    }
-  ]
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "oms-release",
+            "displayName": "OMS Release Build",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_STANDARD": "20",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "oms-debug", 
+            "displayName": "OMS Debug Build",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_STANDARD": "20",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "oms-release-build",
+            "configurePreset": "oms-release",
+            "jobs": 0
+        },
+        {
+            "name": "oms-debug-build", 
+            "configurePreset": "oms-debug",
+            "jobs": 0
+        }
+    ]
 }
